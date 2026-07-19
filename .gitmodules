@@ -1,3 +1,6 @@
 [submodule "external/lvgl"]
 	path = external/lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "external/SDL"]
+	path = external/SDL
+	url = https://github.com/libsdl-org/SDL.git

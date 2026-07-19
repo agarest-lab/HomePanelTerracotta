@@ -1,8 +1,11 @@
-#include <iostream>
+#include "app/Application.h"
+
 
 int main()
 {
-    std::cout << "HomePanel starting..." << std::endl;
+    Application app;
+
+    app.run();
 
     return 0;
 }
