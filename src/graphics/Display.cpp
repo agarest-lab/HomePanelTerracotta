@@ -1,17 +1,13 @@
 #include "Display.h"
 
-#include <iostream>
-
 
 bool Display::init()
 {
-    std::cout << "Display initialization..." << std::endl;
-
-    return true;
+    return backend.init();
 }
 
 
 void Display::loop()
 {
-
+    backend.loop();
 }

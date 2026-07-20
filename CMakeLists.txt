@@ -23,6 +23,10 @@ add_executable(HomePanel
 
     src/graphics/Display.cpp
 
+    src/graphics/SDLDisplay.cpp
+
+    src/ui/UI.cpp
+
 )
 
 target_include_directories(HomePanel

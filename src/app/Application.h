@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../graphics/Display.h"
+#include "../ui/UI.h"
 
 
 class Application
@@ -9,6 +10,8 @@ class Application
 private:
 
     Display display;
+
+    UI ui;
 
 
 public:
