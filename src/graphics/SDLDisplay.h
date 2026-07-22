@@ -26,7 +26,7 @@ private:
 public:
 
     bool init();
-
     void loop();
+    ~SDLDisplay();
 
 };

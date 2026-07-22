@@ -5,15 +5,15 @@
 
 static constexpr int WIDTH = 600;
 static constexpr int HEIGHT = 1024;
-static lv_color_t buffer[600 * 1024];
+static uint8_t buffer[600 * 1024 * 4];
 
 
 
 bool SDLDisplay::init()
 {
-    std::cout << "SDLDisplay init start" << std::endl;
+
     lv_init();
-    std::cout << "LVGL init done" << std::endl;
+
     lv_display_t* display;
 
 
@@ -22,7 +22,10 @@ bool SDLDisplay::init()
         HEIGHT
     );
 
-    std::cout << "LV display created" << std::endl;
+    if(!display)
+    {
+        return false;
+    }
   
     lv_display_set_user_data(
         display,
@@ -33,28 +36,20 @@ bool SDLDisplay::init()
         display,
         flushCallback
     );
-    std::cout << "Flush callback set" << std::endl;
-    std::cout << "Before buffers" << std::endl;
+
     lv_display_set_buffers(
         display,
         buffer,
         nullptr,
         sizeof(buffer),
-        LV_DISPLAY_RENDER_MODE_PARTIAL
+        LV_DISPLAY_RENDER_MODE_FULL
     );
-    std::cout << "After buffers" << std::endl;
-    std::cout << "LV buffers set" << std::endl;
     
     if(!SDL_Init(SDL_INIT_VIDEO))
-    
     {
-        std::cout
-            << SDL_GetError()
-            << std::endl;
 
         return false;
     }
-
 
     window = SDL_CreateWindow(
         "HomePanel",
@@ -63,30 +58,21 @@ bool SDLDisplay::init()
         0
     );
 
-
-    if(!window)
-    {
-        return false;
-    }
-
-
     renderer = SDL_CreateRenderer(window, nullptr);
-
 
     texture = SDL_CreateTexture(
         renderer,
-        SDL_PIXELFORMAT_XRGB8888,
+        SDL_PIXELFORMAT_ARGB8888,
         SDL_TEXTUREACCESS_STREAMING,
         WIDTH,
         HEIGHT
     );
 
+    SDL_SetTextureBlendMode(
+        texture,
+        SDL_BLENDMODE_NONE
+    );
 
-    std::cout 
-        << "LVGL + SDL initialized"
-        << std::endl;
-
-    std::cout << "SDLDisplay init finished" << std::endl;
     return true;
 }
 
@@ -94,7 +80,9 @@ void SDLDisplay::flushCallback(
     lv_display_t* display,
     const lv_area_t* area,
     uint8_t* px_map
+
 )
+
 {
 
     SDLDisplay* self =
@@ -102,16 +90,27 @@ void SDLDisplay::flushCallback(
             lv_display_get_user_data(display)
         );
 
+    static int counter = 0;
+
+    SDL_Rect rect;
+
+    rect.x = area->x1;
+    rect.y = area->y1;
+    rect.w = area->x2 - area->x1 + 1;
+    rect.h = area->y2 - area->y1 + 1;
+
 
     SDL_UpdateTexture(
         self->texture,
         nullptr,
         px_map,
-        600 * sizeof(lv_color_t)
+        WIDTH * 4
     );
 
 
-    SDL_RenderClear(self->renderer);
+    SDL_RenderClear(
+        self->renderer
+    );
 
 
     SDL_RenderTexture(
@@ -128,29 +127,40 @@ void SDLDisplay::flushCallback(
 
 
     lv_display_flush_ready(display);
-
 }
 
 void SDLDisplay::loop()
 {
-
     SDL_Event event;
 
 
     while(SDL_PollEvent(&event))
     {
-
         if(event.type == SDL_EVENT_QUIT)
         {
             exit(0);
         }
-
     }
 
 
-    lv_timer_handler();
+    uint32_t delay = lv_timer_handler();
 
 
-    SDL_Delay(5);
+    SDL_Delay(
+        delay > 5 ? delay : 5
+    );
+}
 
+SDLDisplay::~SDLDisplay()
+{
+    if(texture)
+        SDL_DestroyTexture(texture);
+
+    if(renderer)
+        SDL_DestroyRenderer(renderer);
+
+    if(window)
+        SDL_DestroyWindow(window);
+
+    SDL_Quit();
 }

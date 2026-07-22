@@ -1,25 +1,82 @@
 #include "UI.h"
+#include "../services/HomeAssistantClient.h"
+#include "../config/secrets.h"
+#include <iostream>
+#include "../ui/screens/HomeScreen.h"
 
-#include <lvgl.h>
 
+static HomeAssistantClient ha(
+    HA_URL,
+    HA_TOKEN
+);
+
+static HomeScreen homeScreen;
 
 void UI::init()
 {
 
-    lv_obj_t* label;
+    homeScreen.create();
 
 
-    label = lv_label_create(
-        lv_screen_active()
+    temperature.create();
+
+
+    temperature.setTemperature(
+        ha.getFloatState(
+            "sensor.camera_temperatura_camera"
+        )
     );
 
 
-    lv_label_set_text(
-        label,
-        "HomePanel"
+    temperature.setHumidity(
+        ha.getFloatState(
+            "sensor.camera_umidita_camera"
+        )
+    );
+
+}
+
+void UI::update()
+{
+
+    std::cout
+        << "Updating Home Assistant values"
+        << std::endl;
+
+
+    float temp =
+        ha.getFloatState(
+            "sensor.camera_temperatura_camera"
+        );
+
+
+    float hum =
+        ha.getFloatState(
+            "sensor.camera_umidita_camera"
+        );
+
+
+    std::cout
+        << "Temperature: "
+        << temp
+        << " C"
+        << std::endl;
+
+
+    std::cout
+        << "Humidity: "
+        << hum
+        << " %"
+        << std::endl;
+
+
+    temperature.setTemperature(
+        temp
     );
 
 
-    lv_obj_center(label);
-
+    temperature.setHumidity(
+        hum
+    );
+    lv_refr_now(nullptr);
 }

@@ -1,5 +1,8 @@
 #include "Application.h"
+
 #include <iostream>
+#include <SDL3/SDL.h>
+
 
 void Application::run()
 {
@@ -23,9 +26,30 @@ void Application::run()
     std::cout << "UI OK" << std::endl;
 
 
+
+    uint32_t lastUpdate = 0;
+
+
     while(true)
     {
+
         display.loop();
+
+
+        uint32_t now =
+            SDL_GetTicks();
+
+
+        if(now - lastUpdate > 5000)
+        {
+
+            ui.update();
+
+
+            lastUpdate = now;
+
+        }
+
     }
 
 }

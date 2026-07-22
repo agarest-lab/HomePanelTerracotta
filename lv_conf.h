@@ -812,7 +812,7 @@
 #define LV_BIN_DECODER_RAM_LOAD 0
 
 /** LODEPNG decoder library */
-#define LV_USE_LODEPNG 0
+#define LV_USE_LODEPNG 1
 
 /** PNG decoder(libpng) library */
 #define LV_USE_LIBPNG 0
@@ -926,13 +926,13 @@
 #define LV_FONT_MONTSERRAT_18 0
 
 /** Enable Montserrat 20 */
-#define LV_FONT_MONTSERRAT_20 0
+#define LV_FONT_MONTSERRAT_20 1
 
 /** Enable Montserrat 22 */
 #define LV_FONT_MONTSERRAT_22 0
 
 /** Enable Montserrat 24 */
-#define LV_FONT_MONTSERRAT_24 0
+#define LV_FONT_MONTSERRAT_24 1
 
 /** Enable Montserrat 26 */
 #define LV_FONT_MONTSERRAT_26 0
@@ -944,7 +944,7 @@
 #define LV_FONT_MONTSERRAT_30 0
 
 /** Enable Montserrat 32 */
-#define LV_FONT_MONTSERRAT_32 0
+#define LV_FONT_MONTSERRAT_32 1
 
 /** Enable Montserrat 34 */
 #define LV_FONT_MONTSERRAT_34 0
