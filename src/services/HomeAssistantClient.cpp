@@ -1,11 +1,14 @@
 #include "HomeAssistantClient.h"
-
+#include "../config/secrets.h"
 #include <curl/curl.h>
 #include <nlohmann/json.hpp>
 
 #include <iostream>
+#include <string>
+
 
 using json = nlohmann::json;
+
 
 static size_t WriteCallback(
     void* contents,
@@ -14,13 +17,26 @@ static size_t WriteCallback(
     void* userp
 )
 {
-    ((std::string*)userp)->append(
-        (char*)contents,
-        size * nmemb
+    size_t totalSize = size * nmemb;
+
+    std::string* response =
+        static_cast<std::string*>(userp);
+
+    response->append(
+        static_cast<char*>(contents),
+        totalSize
     );
 
-    return size * nmemb;
+    return totalSize;
 }
+
+HomeAssistantClient::HomeAssistantClient()
+{
+    baseUrl = HA_URL;
+    token = HA_TOKEN;
+}
+
+
 
 HomeAssistantClient::HomeAssistantClient(
     const std::string& url,
@@ -38,24 +54,47 @@ std::string HomeAssistantClient::getState(
     CURL* curl = curl_easy_init();
 
     if(!curl)
+    {
+        std::cout
+            << "curl init failed"
+            << std::endl;
+
         return "";
+    }
+
 
     std::string response;
 
+
     std::string url =
-        baseUrl + "/api/states/" + entityId;
+        baseUrl +
+        "/api/states/" +
+        entityId;
+
+    std::cout
+        << "Request: "
+        << url
+        << std::endl;
 
     struct curl_slist* headers = nullptr;
 
+
+    std::string auth =
+        "Authorization: Bearer " + token;
+
+
     headers = curl_slist_append(
         headers,
-        ("Authorization: Bearer " + token).c_str()
+        auth.c_str()
     );
+
 
     headers = curl_slist_append(
         headers,
         "Content-Type: application/json"
     );
+
+
 
     curl_easy_setopt(
         curl,
@@ -63,11 +102,13 @@ std::string HomeAssistantClient::getState(
         url.c_str()
     );
 
+
     curl_easy_setopt(
         curl,
         CURLOPT_HTTPHEADER,
         headers
     );
+
 
     curl_easy_setopt(
         curl,
@@ -75,42 +116,74 @@ std::string HomeAssistantClient::getState(
         WriteCallback
     );
 
+
     curl_easy_setopt(
         curl,
         CURLOPT_WRITEDATA,
         &response
     );
 
-    CURLcode res = curl_easy_perform(curl);
+
+
+    CURLcode result =
+        curl_easy_perform(curl);
+
+    std::cout
+        << "HA response: "
+        << response
+        << std::endl;
 
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
 
-    if(res != CURLE_OK)
+
+
+    if(result != CURLE_OK)
     {
         std::cout
             << "curl error: "
-            << curl_easy_strerror(res)
+            << curl_easy_strerror(result)
             << std::endl;
 
         return "";
     }
 
+
+
     try
     {
-        json data = json::parse(response);
+        json data =
+            json::parse(response);
 
-        return data["state"].get<std::string>();
+
+        if(!data.contains("state"))
+        {
+            std::cout
+                << "Missing state for "
+                << entityId
+                << std::endl;
+
+            return "";
+        }
+
+
+        return data["state"]
+            .get<std::string>();
+
     }
-    catch(...)
+    catch(const std::exception& e)
     {
         std::cout
-            << "JSON parse error"
+            << "JSON parse error: "
+            << e.what()
             << std::endl;
 
         return "";
     }
 }
+
+
+
 
 std::string HomeAssistantClient::getStringState(
     const std::string& entityId
@@ -119,20 +192,80 @@ std::string HomeAssistantClient::getStringState(
     return getState(entityId);
 }
 
+
+
+
 float HomeAssistantClient::getFloatState(
     const std::string& entityId
 )
 {
-    return std::stof(
-        getState(entityId)
-    );
+    std::string value =
+        getState(entityId);
+
+
+    if(value.empty())
+        return 0.0f;
+
+
+    if(value == "unknown" ||
+       value == "unavailable")
+    {
+        return 0.0f;
+    }
+
+
+    try
+    {
+        return std::stof(value);
+    }
+    catch(const std::exception& e)
+    {
+        std::cout
+            << "Float conversion failed for "
+            << entityId
+            << " value: "
+            << value
+            << std::endl;
+
+        return 0.0f;
+    }
 }
+
+
+
 
 int HomeAssistantClient::getIntState(
     const std::string& entityId
 )
 {
-    return std::stoi(
-        getState(entityId)
-    );
+    std::string value =
+        getState(entityId);
+
+
+    if(value.empty())
+        return 0;
+
+
+    if(value == "unknown" ||
+       value == "unavailable")
+    {
+        return 0;
+    }
+
+
+    try
+    {
+        return std::stoi(value);
+    }
+    catch(const std::exception& e)
+    {
+        std::cout
+            << "Int conversion failed for "
+            << entityId
+            << " value: "
+            << value
+            << std::endl;
+
+        return 0;
+    }
 }

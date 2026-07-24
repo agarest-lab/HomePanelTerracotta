@@ -141,11 +141,12 @@ void EnergyCard::create(
 void EnergyCard::update(
     const EnergyData& data
 )
+
 {
 
     lv_label_set_text_fmt(
         lblPowerFlow,
-        "Casa\n%dW\nRete %dW"
+        "Casa\n%dW\nRete %dW",
         (int)data.housePower,
         (int)data.gridPower
     );
@@ -162,7 +163,7 @@ void EnergyCard::update(
 
     lv_label_set_text_fmt(
         lblOutside,
-        "%d°C\n%d%%"
+        "%d°C\n%d%%",
         (int)data.outsideTemp,
         (int)data.outsideHum
     );
@@ -170,7 +171,7 @@ void EnergyCard::update(
 
     lv_label_set_text_fmt(
         lblLiving,
-        "%d°C\n%d%%"
+        "%d°C\n%d%%",
         (int)data.livingTemp,
         (int)data.livingHum
     );
@@ -178,8 +179,31 @@ void EnergyCard::update(
 
     lv_label_set_text_fmt(
         lblCar,
-        "EV\n%d%%\n%dW"
-        (int)data.carSOC,
-        (int)data.carPower / 1000.0f
+        "EV\n%d%%\n%dW",
+        data.carSOC,
+        data.carPower / 1000.0f
+    );
+
+    lv_label_set_text_fmt(
+        lblPV,
+        "FV\n%dW\nOggi %dkWh",
+        (int)data.pvPower,
+        (int)data.pvTodayKwh
+    );
+
+
+    lv_label_set_text_fmt(
+        lblNight,
+        "%d°C\n%d%%",
+        (int)data.nightTemp,
+        (int)data.nightHum
+    );
+
+
+    lv_label_set_text_fmt(
+        lblInverter,
+        "INV\n%dW\n%d°C",
+        (int)data.inverterPower,
+        (int)data.inverterTemp
     );
 }

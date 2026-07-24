@@ -18,24 +18,34 @@ void HomeScreen::create()
 
     EnergyData data;
 
-
-    data.housePower = 420;
-    data.gridPower = 80;
-
-    data.batterySOC = 85;
-    data.batteryPower = 2300;
-    data.batteryTemp = 31;
-
-    data.outsideTemp = 24.1;
-    data.outsideHum = 58;
-
-    data.livingTemp = 22.8;
-    data.livingHum = 51;
-
-    data.carSOC = 72;
-    data.carPower = 7400;
+    energyData.housePower =
+    homeAssistant.getFloatState(
+        "sensor.contatore_di_energia_potenza_attiva"
+    );
 
 
-    energyCard.update(data);
+    energyData.pvPower =
+        homeAssistant.getFloatState(
+            "sensor.inverter_potenza_attiva"
+        );
+
+
+    energyData.livingTemp =
+         homeAssistant.getFloatState(
+            "sensor.soggiorno_soggiorno_temperatura_soggiorno"
+        );
+
+
+    energyData.livingHum =
+        homeAssistant.getFloatState(
+            "sensor.soggiorno_soggiorno_umidita_soggiorno"
+        );
+
+
+    energyCard.update(
+        energyData
+    );
+
+    energyCard.update(energyData);
 
 }

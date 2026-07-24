@@ -1,16 +1,23 @@
 #pragma once
 
+struct EnergyValue
+{
+    float value;
+    bool valid;
+};
 
 struct EnergyData
 {
     // Casa
     float housePower = 0;
     float gridPower = 0;
+    float importedTodayKwh;
+    float exportedTodayKwh;
 
 
     // Fotovoltaico
     float pvPower = 0;
-    float pvToday = 0;
+    float pvTodayKwh = 0;
 
 
     // Batteria
