@@ -1,5 +1,6 @@
 #pragma once
 #include <lvgl.h>
+#include "../../data/EnergyData.h"
 #define ENERGY_CARD_WIDTH  600
 #define ENERGY_CARD_HEIGHT 400
 
@@ -16,7 +17,9 @@ public:
     );
 
 
-    void update();
+    void update(
+        const EnergyData& data
+    );
 
 
 private:

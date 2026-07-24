@@ -138,37 +138,48 @@ void EnergyCard::create(
         );
 
 }
-void EnergyCard::update()
+void EnergyCard::update(
+    const EnergyData& data
+)
 {
 
-
-    lv_label_set_text(
+    lv_label_set_text_fmt(
         lblPowerFlow,
-        "Casa\n350W\nRete 0W"
+        "Casa\n%dW\nRete %dW"
+        (int)data.housePower,
+        (int)data.gridPower
     );
 
 
-    lv_label_set_text(
+    lv_label_set_text_fmt(
         lblBattery,
-        "85%\n+2.3kW\n31°C"
+        "%d%%\n%dW\n%d°C",
+        (int)data.batterySOC,
+        (int)data.batteryPower,
+        (int)data.batteryTemp
     );
 
 
-    lv_label_set_text(
+    lv_label_set_text_fmt(
         lblOutside,
-        "24.1°C\n58%"
+        "%d°C\n%d%%"
+        (int)data.outsideTemp,
+        (int)data.outsideHum
     );
 
 
-    lv_label_set_text(
+    lv_label_set_text_fmt(
         lblLiving,
-        "22.8°C\n51%"
+        "%d°C\n%d%%"
+        (int)data.livingTemp,
+        (int)data.livingHum
     );
 
 
-    lv_label_set_text(
+    lv_label_set_text_fmt(
         lblCar,
-        "EV\n72%\n7.4kW"
+        "EV\n%d%%\n%dW"
+        (int)data.carSOC,
+        (int)data.carPower / 1000.0f
     );
-
 }
