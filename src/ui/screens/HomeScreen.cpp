@@ -22,6 +22,7 @@ void HomeScreen::create()
         350
     );
 
+
     lv_obj_t* title = lv_label_create(screen);
 
     lv_label_set_text(
@@ -50,5 +51,7 @@ void HomeScreen::create()
         0,
         30
     );
+
+    energyCard.update();
 
 }
