@@ -3,6 +3,8 @@
 #include <cstdio>
 #include "../widgets/EnergyCard.h"
 
+EnergyCard energyCard;
+
 void HomeScreen::create()
 {
     printf("HOMESCREEN CREATE\n");
@@ -14,9 +16,9 @@ void HomeScreen::create()
         0
     );
 
-    EnergyCard::create(
-        screen,
-        10,
+    energyCard.create(
+        lv_screen_active(),
+        0,
         350
     );
 

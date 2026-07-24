@@ -33,6 +33,8 @@ add_executable(HomePanel
 
     src/ui/widgets/EnergyCard.cpp
 
+    src/assets/energy_bg.c
+
 )
 
 find_package(CURL REQUIRED)
