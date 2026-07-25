@@ -1,6 +1,7 @@
 #pragma once
 
 #include "widgets/ClockCard.h"
+#include "widgets/CameraCard.h"
 
 
 class UI
@@ -9,6 +10,7 @@ class UI
 private:
 
     ClockCard clock;
+    CameraCard camera;
 
 
 public:

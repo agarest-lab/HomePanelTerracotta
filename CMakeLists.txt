@@ -29,9 +29,13 @@ add_executable(HomePanel
 
     src/ui/widgets/ClockCard.cpp
 
+    src/ui/widgets/CameraCard.cpp
+
     src/services/HomeAssistantClient.cpp
 
     src/services/HomeAssistantRepository.cpp
+
+    src/services/CameraFeed.cpp
 
     src/ui/widgets/EnergyCard.cpp
 
@@ -43,11 +47,11 @@ add_executable(HomePanel
 
 find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
+find_package(JPEG REQUIRED)
 
-target_include_directories(HomePanel PRIVATE
-    src
-    external/lvgl
-    external/json/single_include
+target_include_directories(HomePanel
+    PRIVATE
+    include
 )
 
 target_link_libraries(HomePanel
@@ -55,4 +59,5 @@ target_link_libraries(HomePanel
     SDL3::SDL3
     CURL::libcurl
     Threads::Threads
+    JPEG::JPEG
 )
