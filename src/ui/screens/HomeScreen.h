@@ -1,15 +1,18 @@
 #pragma once
 
 #include "../widgets/EnergyCard.h"
+#include "../widgets/EntityButtonRow.h"
 #include "../../data/EnergyData.h"
-#include "../../services/HomeAssistantClient.h"
+
 
 class HomeScreen
 {
 
 public:
+
     void create();
     void updateData();
+
 
 private:
 
@@ -21,6 +24,8 @@ private:
 
     EnergyCard energyCard;
     EnergyData energyData;
-    HomeAssistantClient homeAssistant;
+
+    EntityButtonRow lightsRow;
+    EntityButtonRow socketsRow;
 
 };

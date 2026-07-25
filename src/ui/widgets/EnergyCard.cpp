@@ -1,7 +1,7 @@
 #include "EnergyCard.h"
 #include "../../assets/energy_bg.h"
 #include <iostream>
-#define ENERGY_CARD_WIDTH  600
+#define ENERGY_CARD_WIDTH  595
 #define ENERGY_CARD_HEIGHT 400
 
 lv_obj_t* EnergyCard::createLabel(
@@ -87,57 +87,57 @@ void EnergyCard::create(
 
     lblPowerFlow =
         createLabel(
-            350,
-            40
+            420,
+            25
         );
 
 
     lblPV =
         createLabel(
-            50,
-            60
+            10,
+            80
         );
 
 
     lblBattery =
         createLabel(
-            250,
-            100
+            140,
+            280
         );
 
 
     lblOutside =
         createLabel(
-            450,
-            60
+            120,
+            20
         );
 
 
     lblLiving =
         createLabel(
-            350,
-            180
+            320,
+            90
         );
 
 
     lblNight =
         createLabel(
-            500,
-            180
+            320,
+            40
         );
 
 
     lblCar =
         createLabel(
-            250,
-            250
+            470,
+            270
         );
 
 
     lblInverter =
         createLabel(
-            80,
-            250
+            320,
+            280
         );
 
 }

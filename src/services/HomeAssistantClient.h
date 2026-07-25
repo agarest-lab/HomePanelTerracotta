@@ -35,6 +35,8 @@ public:
         const std::string& entityId
     );
 
+    bool getBoolState(const std::string& entityId);
+    bool callService(const std::string& domain, const std::string& service, const std::string& entityId);
 
 private:
 

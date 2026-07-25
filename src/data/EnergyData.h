@@ -11,8 +11,8 @@ struct EnergyData
     // Casa
     float housePower = 0;
     float gridPower = 0;
-    float importedTodayKwh;
-    float exportedTodayKwh;
+    float importedTodayKwh = 0;
+    float exportedTodayKwh = 0;
 
 
     // Fotovoltaico

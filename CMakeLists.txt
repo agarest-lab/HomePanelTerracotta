@@ -18,26 +18,31 @@ add_executable(HomePanel
     src/main.cpp
 
     src/app/Application.cpp
-    
+
     src/graphics/Display.cpp
-    
+
     src/graphics/SDLDisplay.cpp
-    
+
     src/ui/UI.cpp
-    
+
     src/ui/screens/HomeScreen.cpp
-    
+
     src/ui/widgets/TemperatureCard.cpp
 
     src/services/HomeAssistantClient.cpp
 
+    src/services/HomeAssistantRepository.cpp
+
     src/ui/widgets/EnergyCard.cpp
+
+    src/ui/widgets/EntityButtonRow.cpp
 
     src/assets/energy_bg.c
 
 )
 
 find_package(CURL REQUIRED)
+find_package(Threads REQUIRED)
 
 target_include_directories(HomePanel
     PRIVATE
@@ -48,4 +53,5 @@ target_link_libraries(HomePanel
     lvgl
     SDL3::SDL3
     CURL::libcurl
+    Threads::Threads
 )

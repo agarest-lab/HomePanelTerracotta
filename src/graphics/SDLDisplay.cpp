@@ -1,19 +1,20 @@
 #include "SDLDisplay.h"
-
 #include <iostream>
-
 
 static constexpr int WIDTH = 600;
 static constexpr int HEIGHT = 1024;
 static uint8_t buffer[600 * 1024 * 4];
 
-
+static uint32_t getTickCallback()
+{
+    return static_cast<uint32_t>(SDL_GetTicks());
+}
 
 bool SDLDisplay::init()
 {
 
     lv_init();
-
+    lv_tick_set_cb(getTickCallback);
     lv_display_t* display;
 
 
@@ -45,6 +46,10 @@ bool SDLDisplay::init()
         LV_DISPLAY_RENDER_MODE_FULL
     );
     
+    indev = lv_indev_create();
+    lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
+    lv_indev_set_read_cb(indev, mouseReadCallback);
+
     if(!SDL_Init(SDL_INIT_VIDEO))
     {
 
@@ -74,6 +79,27 @@ bool SDLDisplay::init()
     );
 
     return true;
+}
+
+void SDLDisplay::mouseReadCallback(
+    lv_indev_t* indev,
+    lv_indev_data_t* data
+)
+{
+    float x, y;
+    Uint32 buttons = SDL_GetMouseState(&x, &y);
+
+    data->point.x = (lv_coord_t)x;
+    data->point.y = (lv_coord_t)y;
+
+    data->state = (buttons & SDL_BUTTON_MASK(SDL_BUTTON_LEFT))
+        ? LV_INDEV_STATE_PRESSED
+        : LV_INDEV_STATE_RELEASED;
+    
+    if(data->state == LV_INDEV_STATE_PRESSED)
+    {
+        std::cout << "Mouse PRESSED at " << x << "," << y << std::endl;
+    }
 }
 
 void SDLDisplay::flushCallback(
@@ -143,12 +169,9 @@ void SDLDisplay::loop()
     }
 
 
-    uint32_t delay = lv_timer_handler();
+    lv_timer_handler();
 
-
-    SDL_Delay(
-        delay > 5 ? delay : 5
-    );
+    SDL_Delay(5);   // <-- fisso, ignora il valore di ritorno di lv_timer_handler
 }
 
 SDLDisplay::~SDLDisplay()
