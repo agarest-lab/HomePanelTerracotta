@@ -1,9 +1,9 @@
 #include "SDLDisplay.h"
 #include <iostream>
 
-static constexpr int WIDTH = 600;
-static constexpr int HEIGHT = 1024;
-static uint8_t buffer[600 * 1024 * 4];
+static constexpr int WIDTH = 800;
+static constexpr int HEIGHT = 1920;
+static uint8_t buffer[800 * 1920 * 4];
 
 static uint32_t getTickCallback()
 {

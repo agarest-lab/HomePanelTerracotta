@@ -3,9 +3,9 @@
 
 #include <iostream>
 
-#define BTN_WIDTH  100
-#define BTN_HEIGHT 80
-#define BTN_GAP    10
+#define BTN_WIDTH  133
+#define BTN_HEIGHT 107
+#define BTN_GAP    13
 
 
 void EntityButtonRow::create(

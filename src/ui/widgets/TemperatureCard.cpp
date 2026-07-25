@@ -57,15 +57,15 @@ void TemperatureCard::create()
 
     lv_obj_set_size(
         card,
-        300,
-        220
+        400,
+        293
     );
 
 
     lv_obj_set_pos(
         card,
-        40,
-        120
+        53,
+        160
     );
 
 

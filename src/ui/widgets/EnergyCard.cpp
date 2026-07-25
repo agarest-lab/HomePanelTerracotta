@@ -51,6 +51,7 @@ void EnergyCard::create(
     container =
         lv_obj_create(parent);
 
+    lv_obj_add_flag(container, LV_OBJ_FLAG_OVERFLOW_VISIBLE);
 
     lv_obj_set_size(
         container,
@@ -74,11 +75,12 @@ void EnergyCard::create(
         &energy_bg
     );
 
+    lv_img_set_zoom(image, 341);   // 256 = 100%, 341 ≈ 133% (fattore 4/3)
 
     lv_obj_set_pos(
         image,
-        -26,
-        -26
+        -35 ,
+        -35
     );
 
 
