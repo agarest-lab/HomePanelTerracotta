@@ -1,8 +1,8 @@
 #include "EnergyCard.h"
 #include "../../assets/energy_bg.h"
 #include <iostream>
-#define ENERGY_CARD_WIDTH  680
-#define ENERGY_CARD_HEIGHT 450
+#define ENERGY_CARD_WIDTH  1080
+#define ENERGY_CARD_HEIGHT 715
 
 lv_obj_t* EnergyCard::createLabel(
     int x,
@@ -75,12 +75,12 @@ void EnergyCard::create(
         &energy_bg
     );
 
-    lv_img_set_zoom(image, 341);   // 256 = 100%, 341 ≈ 133% (fattore 4/3)
+    lv_img_set_zoom(image, 500);   // 256 = 100%, 341 ≈ 133% (fattore 4/3)
 
     lv_obj_set_pos(
         image,
-        -35 ,
-        -35
+        160,
+        160
     );
 
 

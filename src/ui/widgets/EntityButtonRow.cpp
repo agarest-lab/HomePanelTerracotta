@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-#define BTN_WIDTH  133
-#define BTN_HEIGHT 107
+#define BTN_WIDTH  180
+#define BTN_HEIGHT 130
 #define BTN_GAP    13
 
 

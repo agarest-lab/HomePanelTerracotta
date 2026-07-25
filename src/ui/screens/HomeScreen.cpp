@@ -14,7 +14,7 @@ void HomeScreen::create()
         467
     );
 
-    lightsRow.create(lv_screen_active(), 27, 1040, {
+    lightsRow.create(lv_screen_active(), 27, 1190, {
         { "switch.led_cucina_switch_0",          "switch", "Led cucina" },
         { "switch.penisola_switch_0",            "switch", "Penisola" },
         { "switch.deviatore_wi_fi_ble_switch_1", "switch", "Soggiorno" },
@@ -22,7 +22,7 @@ void HomeScreen::create()
         { "switch.luce_armadio_switch_0",        "switch", "Armadio" },
     });
 
-    socketsRow.create(lv_screen_active(), 27, 1173, {
+    socketsRow.create(lv_screen_active(), 27, 1323, {
         { "switch.lampada_presa",         "switch", "Lampada" },
         { "switch.luce_garage_switch_0",  "switch", "Garage" },
         { "switch.luce_scala_switch_0",   "switch", "Scala" },
