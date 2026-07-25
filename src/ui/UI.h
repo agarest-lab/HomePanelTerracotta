@@ -1,6 +1,6 @@
 #pragma once
 
-#include "widgets/TemperatureCard.h"
+#include "widgets/ClockCard.h"
 
 
 class UI
@@ -8,7 +8,7 @@ class UI
 
 private:
 
-    TemperatureCard temperature;
+    ClockCard clock;
 
 
 public:

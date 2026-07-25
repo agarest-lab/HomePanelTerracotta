@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#define BTN_WIDTH  180
+#define BTN_WIDTH  195
 #define BTN_HEIGHT 130
 #define BTN_GAP    13
 
@@ -35,6 +35,7 @@ void EntityButtonRow::create(
 
         lv_obj_t* label = lv_label_create(btn);
         lv_label_set_text(label, configs[i].label.c_str());
+        lv_obj_set_style_text_font(label, &lv_font_montserrat_32, 0);
         lv_obj_center(label);
 
         ButtonEntry entry;

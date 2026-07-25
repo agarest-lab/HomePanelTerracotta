@@ -27,7 +27,7 @@ add_executable(HomePanel
 
     src/ui/screens/HomeScreen.cpp
 
-    src/ui/widgets/TemperatureCard.cpp
+    src/ui/widgets/ClockCard.cpp
 
     src/services/HomeAssistantClient.cpp
 
