@@ -1,5 +1,6 @@
 #include "EnergyCard.h"
 #include "../../assets/energy_bg.h"
+#include <iostream>
 #define ENERGY_CARD_WIDTH  600
 #define ENERGY_CARD_HEIGHT 400
 
@@ -50,11 +51,13 @@ void EnergyCard::create(
     container =
         lv_obj_create(parent);
 
+
     lv_obj_set_size(
         container,
         ENERGY_CARD_WIDTH,
         ENERGY_CARD_HEIGHT
     );
+
 
     lv_obj_set_pos(
         container,
@@ -62,17 +65,13 @@ void EnergyCard::create(
         y
     );
 
+
+    // SFONDO PRIMA
     image = lv_img_create(container);
 
     lv_img_set_src(
         image,
         &energy_bg
-    );
-    
-    lv_obj_set_style_pad_all(
-        image,
-        0,
-        0
     );
 
 
@@ -81,6 +80,10 @@ void EnergyCard::create(
         -26,
         -26
     );
+
+
+    // manda l'immagine dietro
+    lv_obj_move_background(image);
 
     lblPowerFlow =
         createLabel(
@@ -143,6 +146,19 @@ void EnergyCard::update(
 )
 
 {
+    std::cout 
+    << "Energy update: "
+    << data.housePower
+    << " W PV "
+    << data.pvPower
+    << std::endl;
+
+    std::cout 
+        << "ENERGY CARD UPDATE "
+        << data.livingTemp
+        << " "
+        << data.livingHum
+        << std::endl;
 
     lv_label_set_text_fmt(
         lblPowerFlow,
@@ -179,8 +195,8 @@ void EnergyCard::update(
 
     lv_label_set_text_fmt(
         lblCar,
-        "EV\n%d%%\n%dW",
-        data.carSOC,
+        "EV\n%d%%\n%.1fkW",
+        (int)data.carSOC,
         data.carPower / 1000.0f
     );
 
