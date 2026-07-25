@@ -44,9 +44,10 @@ add_executable(HomePanel
 find_package(CURL REQUIRED)
 find_package(Threads REQUIRED)
 
-target_include_directories(HomePanel
-    PRIVATE
-    include
+target_include_directories(HomePanel PRIVATE
+    src
+    external/lvgl
+    external/json/single_include
 )
 
 target_link_libraries(HomePanel
