@@ -1,8 +1,8 @@
 #include "EnergyCard.h"
 #include "../../assets/energy_bg.h"
 #include <iostream>
-#define ENERGY_CARD_WIDTH  595
-#define ENERGY_CARD_HEIGHT 400
+#define ENERGY_CARD_WIDTH  680
+#define ENERGY_CARD_HEIGHT 450
 
 lv_obj_t* EnergyCard::createLabel(
     int x,
@@ -199,7 +199,7 @@ void EnergyCard::update(
         lblCar,
         "EV\n%d%%\n%.1fkW",
         (int)data.carSOC,
-        data.carPower / 1000.0f
+        (int)data.carPower
     );
 
     lv_label_set_text_fmt(
