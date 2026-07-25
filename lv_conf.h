@@ -938,7 +938,7 @@
 #define LV_FONT_MONTSERRAT_26 0
 
 /** Enable Montserrat 28 */
-#define LV_FONT_MONTSERRAT_28 0
+#define LV_FONT_MONTSERRAT_28 1
 
 /** Enable Montserrat 30 */
 #define LV_FONT_MONTSERRAT_30 0
@@ -950,13 +950,13 @@
 #define LV_FONT_MONTSERRAT_34 0
 
 /** Enable Montserrat 36 */
-#define LV_FONT_MONTSERRAT_36 0
+#define LV_FONT_MONTSERRAT_36 1
 
 /** Enable Montserrat 38 */
 #define LV_FONT_MONTSERRAT_38 0
 
 /** Enable Montserrat 40 */
-#define LV_FONT_MONTSERRAT_40 0
+#define LV_FONT_MONTSERRAT_40 1
 
 /** Enable Montserrat 42 */
 #define LV_FONT_MONTSERRAT_42 0
@@ -968,7 +968,7 @@
 #define LV_FONT_MONTSERRAT_46 0
 
 /** Enable Montserrat 48 */
-#define LV_FONT_MONTSERRAT_48 0
+#define LV_FONT_MONTSERRAT_48 1
 
 /** Enable Montserrat 28 compressed */
 #define LV_FONT_MONTSERRAT_28_COMPRESSED 0

@@ -7,7 +7,9 @@
 
 void HomeScreen::create()
 {
-
+    lv_obj_set_style_bg_color(lv_screen_active(), lv_color_black(), 0);
+    lv_obj_set_style_bg_opa(lv_screen_active(), LV_OPA_COVER, 0);
+    
     energyCard.create(
         lv_screen_active(),
         0,

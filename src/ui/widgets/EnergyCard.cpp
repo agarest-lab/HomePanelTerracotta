@@ -31,7 +31,7 @@ lv_obj_t* EnergyCard::createLabel(
 
     lv_obj_set_style_text_font(
         label,
-        &lv_font_montserrat_14,
+        &lv_font_montserrat_28,
         0
     );
 
@@ -50,6 +50,10 @@ void EnergyCard::create(
 
     container =
         lv_obj_create(parent);
+
+    lv_obj_set_style_bg_opa(container, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(container, 0, 0);
+    lv_obj_set_style_pad_all(container, 0, 0);
 
     lv_obj_add_flag(container, LV_OBJ_FLAG_OVERFLOW_VISIBLE);
 
@@ -75,7 +79,7 @@ void EnergyCard::create(
         &energy_bg
     );
 
-    lv_img_set_zoom(image, 500);   // 256 = 100%, 341 ≈ 133% (fattore 4/3)
+    lv_img_set_zoom(image, 500);
 
     lv_obj_set_pos(
         image,
