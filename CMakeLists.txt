@@ -31,6 +31,8 @@ add_executable(HomePanel
 
     src/ui/widgets/CameraCard.cpp
 
+    src/ui/widgets/StatusCardsRow.cpp
+
     src/services/HomeAssistantClient.cpp
 
     src/services/HomeAssistantRepository.cpp
@@ -44,6 +46,7 @@ add_executable(HomePanel
     src/assets/energy_bg.c
 
     src/assets/montserrat_orario_140.c
+
 )
 
 find_package(CURL REQUIRED)

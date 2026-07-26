@@ -7,16 +7,17 @@
 
 void HomeScreen::create()
 {
+
     lv_obj_set_style_bg_color(lv_screen_active(), lv_color_black(), 0);
     lv_obj_set_style_bg_opa(lv_screen_active(), LV_OPA_COVER, 0);
-    
+
     energyCard.create(
         lv_screen_active(),
         0,
-        467
+        310
     );
 
-    lightsRow.create(lv_screen_active(), 27, 1190, {
+    lightsRow.create(lv_screen_active(), 27, 1035, {
         { "switch.led_cucina_switch_0",          "switch", "Led cucina" },
         { "switch.penisola_switch_0",            "switch", "Penisola" },
         { "switch.deviatore_wi_fi_ble_switch_1", "switch", "Soggiorno" },
@@ -24,13 +25,24 @@ void HomeScreen::create()
         { "switch.luce_armadio_switch_0",        "switch", "Armadio" },
     });
 
-    socketsRow.create(lv_screen_active(), 27, 1323, {
+    socketsRow.create(lv_screen_active(), 27, 1178, {
         { "switch.lampada_presa",         "switch", "Lampada" },
         { "switch.luce_garage_switch_0",  "switch", "Garage" },
         { "switch.luce_scala_switch_0",   "switch", "Scala" },
         { "light.cuoricini",              "light",  "Cuoricini" },
         { "switch.fvbalcone_presa_1",     "switch", "Lavatrice" },
     });
+
+    // Riga di 4 card in basso, larga quanto lo schermo (1080px),
+    // subito sotto la riga delle prese.
+    statusRow.create(
+        lv_screen_active(),
+        0,
+        1323,
+        1080,
+        180
+    );
+
 
     // Registra presso il repository tutte le entità sensore usate
     // dalla EnergyCard, così il thread di polling in background
@@ -168,6 +180,8 @@ void HomeScreen::updateData()
 
     lightsRow.refresh();
     socketsRow.refresh();
+
+    // statusRow si aggiorna da sola tramite il proprio timer interno
 }
 
 

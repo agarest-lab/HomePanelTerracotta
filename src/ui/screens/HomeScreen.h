@@ -2,6 +2,7 @@
 
 #include "../widgets/EnergyCard.h"
 #include "../widgets/EntityButtonRow.h"
+#include "../widgets/StatusCardsRow.h"
 #include "../../data/EnergyData.h"
 
 
@@ -27,5 +28,7 @@ private:
 
     EntityButtonRow lightsRow;
     EntityButtonRow socketsRow;
+
+    StatusCardsRow statusRow;
 
 };
