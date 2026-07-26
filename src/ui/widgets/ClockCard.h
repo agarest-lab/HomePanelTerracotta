@@ -20,6 +20,7 @@ public:
 private:
 
     lv_obj_t* card = nullptr;
+
     lv_obj_t* timeLabel = nullptr;
     lv_obj_t* dateLabel = nullptr;
 

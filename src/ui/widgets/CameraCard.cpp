@@ -25,11 +25,12 @@ void CameraCard::create(
     lv_obj_set_style_pad_all(card, 0, 0);
     lv_obj_set_style_radius(card, 12, 0);
 
-    lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_remove_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
 
     image = lv_img_create(card);
 
+    lv_img_set_pivot(image, 0, 0);
 
     // Avvia il download in background (non fa nulla se già avviato
     // per questa entità in precedenza).

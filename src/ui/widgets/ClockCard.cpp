@@ -1,4 +1,5 @@
 #include "ClockCard.h"
+#include "../../assets/montserrat_orario_140.h"
 
 #include <ctime>
 #include <cstdio>
@@ -33,30 +34,14 @@ void ClockCard::create(
 
 
     timeLabel = lv_label_create(card);
-
     lv_obj_set_style_text_color(timeLabel, lv_color_white(), 0);
-    lv_obj_set_style_text_font(timeLabel, &lv_font_montserrat_48, 0);
-
-    // Serve impostare il pivot dello zoom sull'angolo in alto a sinistra,
-    // altrimenti LVGL scala "dal centro" e la posizione salta.
-    lv_obj_set_style_transform_pivot_x(timeLabel, 0, 0);
-    lv_obj_set_style_transform_pivot_y(timeLabel, 0, 0);
-    /*
-    lv_obj_set_style_transform_zoom(timeLabel, 300, 0);   // 256=100%, 500≈195%
-    */
+    lv_obj_set_style_text_font(timeLabel, &montserrat_orario_140, 0);
     lv_obj_set_pos(timeLabel, 10, 10);
 
 
     dateLabel = lv_label_create(card);
-
     lv_obj_set_style_text_color(dateLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_20, 0);
-
-    lv_obj_set_style_transform_pivot_x(dateLabel, 0, 0);
-    lv_obj_set_style_transform_pivot_y(dateLabel, 0, 0);
-    /*
-    lv_obj_set_style_transform_zoom(dateLabel, 250, 0);   // ≈137%
-    */
     lv_obj_set_pos(dateLabel, 15, 190);
 
 

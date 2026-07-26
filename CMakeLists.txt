@@ -43,6 +43,7 @@ add_executable(HomePanel
 
     src/assets/energy_bg.c
 
+    src/assets/montserrat_orario_140.c
 )
 
 find_package(CURL REQUIRED)

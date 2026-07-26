@@ -1,22 +1,25 @@
 #include "SDLDisplay.h"
+
 #include <iostream>
+
 
 static constexpr int WIDTH = 1080;
 static constexpr int HEIGHT = 1920;
 static uint8_t buffer[1080 * 1920 * 4];
+
 
 static uint32_t getTickCallback()
 {
     return static_cast<uint32_t>(SDL_GetTicks());
 }
 
+
 bool SDLDisplay::init()
 {
-
     lv_init();
     lv_tick_set_cb(getTickCallback);
-    lv_display_t* display;
 
+    lv_display_t* display;
 
     display = lv_display_create(
         WIDTH,
@@ -25,9 +28,10 @@ bool SDLDisplay::init()
 
     if(!display)
     {
+        std::cout << "lv_display_create failed" << std::endl;
         return false;
     }
-  
+
     lv_display_set_user_data(
         display,
         this
@@ -45,14 +49,14 @@ bool SDLDisplay::init()
         sizeof(buffer),
         LV_DISPLAY_RENDER_MODE_FULL
     );
-    
+
     indev = lv_indev_create();
     lv_indev_set_type(indev, LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(indev, mouseReadCallback);
 
     if(!SDL_Init(SDL_INIT_VIDEO))
     {
-
+        std::cout << "SDL_Init failed: " << SDL_GetError() << std::endl;
         return false;
     }
 
@@ -60,10 +64,22 @@ bool SDLDisplay::init()
         "HomePanel",
         WIDTH,
         HEIGHT,
-        0
+        SDL_WINDOW_FULLSCREEN
     );
 
+    if(!window)
+    {
+        std::cout << "SDL_CreateWindow failed: " << SDL_GetError() << std::endl;
+        return false;
+    }
+
     renderer = SDL_CreateRenderer(window, nullptr);
+
+    if(!renderer)
+    {
+        std::cout << "SDL_CreateRenderer failed: " << SDL_GetError() << std::endl;
+        return false;
+    }
 
     texture = SDL_CreateTexture(
         renderer,
@@ -73,13 +89,22 @@ bool SDLDisplay::init()
         HEIGHT
     );
 
+    if(!texture)
+    {
+        std::cout << "SDL_CreateTexture failed: " << SDL_GetError() << std::endl;
+        return false;
+    }
+
     SDL_SetTextureBlendMode(
         texture,
         SDL_BLENDMODE_NONE
     );
 
+    std::cout << "SDLDisplay init OK (" << WIDTH << "x" << HEIGHT << ")" << std::endl;
+
     return true;
 }
+
 
 void SDLDisplay::mouseReadCallback(
     lv_indev_t* indev,
@@ -95,28 +120,24 @@ void SDLDisplay::mouseReadCallback(
     data->state = (buttons & SDL_BUTTON_MASK(SDL_BUTTON_LEFT))
         ? LV_INDEV_STATE_PRESSED
         : LV_INDEV_STATE_RELEASED;
-    
+
     if(data->state == LV_INDEV_STATE_PRESSED)
     {
         std::cout << "Mouse PRESSED at " << x << "," << y << std::endl;
     }
 }
 
+
 void SDLDisplay::flushCallback(
     lv_display_t* display,
     const lv_area_t* area,
     uint8_t* px_map
-
 )
-
 {
-
     SDLDisplay* self =
         static_cast<SDLDisplay*>(
             lv_display_get_user_data(display)
         );
-
-    static int counter = 0;
 
     SDL_Rect rect;
 
@@ -125,7 +146,6 @@ void SDLDisplay::flushCallback(
     rect.w = area->x2 - area->x1 + 1;
     rect.h = area->y2 - area->y1 + 1;
 
-
     SDL_UpdateTexture(
         self->texture,
         nullptr,
@@ -133,11 +153,9 @@ void SDLDisplay::flushCallback(
         WIDTH * 4
     );
 
-
     SDL_RenderClear(
         self->renderer
     );
-
 
     SDL_RenderTexture(
         self->renderer,
@@ -146,19 +164,17 @@ void SDLDisplay::flushCallback(
         nullptr
     );
 
-
     SDL_RenderPresent(
         self->renderer
     );
 
-
     lv_display_flush_ready(display);
 }
+
 
 void SDLDisplay::loop()
 {
     SDL_Event event;
-
 
     while(SDL_PollEvent(&event))
     {
@@ -168,11 +184,11 @@ void SDLDisplay::loop()
         }
     }
 
-
     lv_timer_handler();
 
-    SDL_Delay(5);   // <-- fisso, ignora il valore di ritorno di lv_timer_handler
+    SDL_Delay(5);
 }
+
 
 SDLDisplay::~SDLDisplay()
 {
