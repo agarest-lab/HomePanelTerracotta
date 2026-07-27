@@ -51,6 +51,14 @@ void HomeScreen::create()
         180
     );
 
+    calendarCard.create(
+        lv_screen_active(),
+        0,
+        1703,
+        1080,
+        220
+    );
+
     // Registra presso il repository tutte le entità sensore usate
     // dalla EnergyCard, così il thread di polling in background
     // inizia a tenerle aggiornate.

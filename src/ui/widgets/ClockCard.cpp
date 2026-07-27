@@ -6,8 +6,8 @@
 
 
 static const char* const kGiorni[7] = {
-    "domenica", "lunedì", "martedì", "mercoledì",
-    "giovedì", "venerdì", "sabato"
+    "domenica", "lunedi", "martedi", "mercoledi",
+    "giovedi", "venerdi", "sabato"
 };
 
 static const char* const kMesi[12] = {

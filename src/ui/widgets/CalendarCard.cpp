@@ -1,0 +1,145 @@
+#include "CalendarCard.h"
+#include "../../services/CalendarFeed.h"
+
+#include <cstdio>
+
+
+lv_color_t CalendarCard::colorForCalendar(const std::string& entityId)
+{
+    if(entityId == "calendar.omar_rossoni_gmail_com")
+        return lv_color_hex(0x4285F4);   // stile Google Calendar
+
+    if(entityId == "calendar.sendina")
+        return lv_color_hex(0xFF7043);
+
+    return lv_color_white();
+}
+
+
+void CalendarCard::create(
+    lv_obj_t* parent,
+    int x,
+    int y,
+    int width,
+    int height
+)
+{
+    card = lv_obj_create(parent);
+
+    lv_obj_set_size(card, width, height);
+    lv_obj_set_pos(card, x, y);
+
+    lv_obj_set_style_bg_color(card, lv_color_hex(0x1A1A1A), 0);
+    lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(card, 0, 0);
+    lv_obj_set_style_radius(card, 16, 0);
+    lv_obj_set_style_pad_all(card, 16, 0);
+
+    lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
+
+
+    lv_obj_t* title = lv_label_create(card);
+    lv_label_set_text(title, "Impegni");
+    lv_obj_set_style_text_color(title, lv_color_hex(0xD8D8D8), 0);
+    lv_obj_set_style_text_font(title, &lv_font_montserrat_32, 0);
+    lv_obj_set_pos(title, 0, 0);
+
+
+    // Container separato per la lista, così a ogni refresh possiamo
+    // ripulirlo e ricostruirlo senza toccare il titolo.
+    listContainer = lv_obj_create(card);
+    lv_obj_set_size(listContainer, width - 32, height - 60);
+    lv_obj_set_pos(listContainer, 0, 50);
+    lv_obj_set_style_bg_opa(listContainer, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(listContainer, 0, 0);
+    lv_obj_set_style_pad_all(listContainer, 0, 0);
+    lv_obj_set_flex_flow(listContainer, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(
+        listContainer,
+        LV_FLEX_ALIGN_START,
+        LV_FLEX_ALIGN_START,
+        LV_FLEX_ALIGN_START
+    );
+
+
+    auto& feed = CalendarFeed::instance();
+
+    feed.watchCalendar("calendar.omar_rossoni_gmail_com");
+    feed.watchCalendar("calendar.sendina");
+
+    feed.start();
+
+
+    refresh();
+
+    updateTimer = lv_timer_create(timerCallback, 30000, this);
+}
+
+
+void CalendarCard::refresh()
+{
+    // Ripulisce e ricostruisce la lista (il numero di eventi cambia)
+    lv_obj_clean(listContainer);
+
+    auto events = CalendarFeed::instance().getEvents();
+
+    int count = 0;
+
+    for(const auto& ev : events)
+    {
+        if(count >= maxEvents)
+            break;
+
+        lv_obj_t* row = lv_obj_create(listContainer);
+        lv_obj_set_size(row, lv_pct(100), LV_SIZE_CONTENT);
+        lv_obj_set_style_bg_opa(row, LV_OPA_TRANSP, 0);
+        lv_obj_set_style_border_width(row, 0, 0);
+        lv_obj_set_style_pad_all(row, 4, 0);
+        lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
+
+        char dateTimeBuf[64];
+        std::snprintf(
+            dateTimeBuf,
+            sizeof(dateTimeBuf),
+            "%s  %s",
+            ev.displayDate.c_str(),
+            ev.displayTime.c_str()
+        );
+
+        lv_obj_t* dateLabel = lv_label_create(row);
+        lv_label_set_text(dateLabel, dateTimeBuf);
+        lv_obj_set_style_text_color(dateLabel, colorForCalendar(ev.calendarId), 0);
+        lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_20, 0);
+        lv_obj_set_pos(dateLabel, 0, 0);
+
+        lv_obj_t* summaryLabel = lv_label_create(row);
+        lv_label_set_text(summaryLabel, ev.summary.c_str());
+        lv_obj_set_style_text_color(summaryLabel, lv_color_white(), 0);
+        lv_obj_set_style_text_font(summaryLabel, &lv_font_montserrat_20, 0);
+        lv_obj_set_pos(summaryLabel, 250, 0);
+
+        count++;
+    }
+
+    if(count == 0)
+    {
+        lv_obj_t* emptyLabel = lv_label_create(listContainer);
+        lv_label_set_text(emptyLabel, "Nessun impegno nei prossimi 7 giorni");
+        lv_obj_set_style_text_color(emptyLabel, lv_color_hex(0x808080), 0);
+        lv_obj_set_style_text_font(emptyLabel, &lv_font_montserrat_20, 0);
+    }
+}
+
+
+void CalendarCard::timerCallback(lv_timer_t* timer)
+{
+    CalendarCard* self =
+        static_cast<CalendarCard*>(
+            lv_timer_get_user_data(timer)
+        );
+
+    if(self)
+    {
+        self->refresh();
+    }
+}

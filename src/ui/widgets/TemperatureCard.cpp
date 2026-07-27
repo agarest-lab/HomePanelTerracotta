@@ -1,8 +1,5 @@
 #include "TemperatureCard.h"
-
 #include <cstdio>
-
-
 
 lv_obj_t* TemperatureCard::createText(
     lv_obj_t* parent,
@@ -14,12 +11,10 @@ lv_obj_t* TemperatureCard::createText(
 {
     lv_obj_t* label = lv_label_create(parent);
 
-
     lv_label_set_text(
         label,
         text
     );
-
 
     lv_obj_set_pos(
         label,
@@ -27,20 +22,17 @@ lv_obj_t* TemperatureCard::createText(
         y
     );
 
-
     lv_obj_set_style_text_color(
         label,
         lv_color_hex(0xffffff),
         0
     );
 
-
     lv_obj_set_style_text_font(
         label,
         &lv_font_montserrat_20,
         0
     );
-
 
     return label;
 }

@@ -5,6 +5,7 @@
 #include "../widgets/StatusCardsRow.h"
 #include "../../data/EnergyData.h"
 #include "../widgets/WeatherCardsRow.h"
+#include "../widgets/CalendarCard.h"
 
 
 class HomeScreen
@@ -32,5 +33,6 @@ private:
 
     StatusCardsRow statusRow;
     WeatherCardsRow weatherRow;
+    CalendarCard calendarCard;
 
 };

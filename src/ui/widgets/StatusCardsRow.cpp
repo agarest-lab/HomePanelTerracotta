@@ -64,7 +64,7 @@ void StatusCardsRow::create(
     condensaCard = createCardContainer(parent, x, y, cardWidth, height);
 
     lv_obj_t* condensaTitle = lv_label_create(condensaCard);
-    lv_label_set_text(condensaTitle, "Limite\n\ncondensa");
+    lv_label_set_text(condensaTitle, "Limite\ncondensa");
     lv_obj_set_style_text_color(condensaTitle, lv_color_hex(0xFF7043), 0);
     lv_obj_set_style_text_font(condensaTitle, &lv_font_montserrat_32, 0);
     lv_obj_align(condensaTitle, LV_ALIGN_TOP_MID, 0, 0);

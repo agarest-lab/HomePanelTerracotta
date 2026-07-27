@@ -49,6 +49,10 @@ add_executable(HomePanel
 
     src/ui/widgets/WeatherCardsRow.cpp
 
+    src/services/CalendarFeed.cpp
+
+    src/ui/widgets/CalendarCard.cpp
+
 )
 
 find_package(CURL REQUIRED)
