@@ -43,6 +43,13 @@ void HomeScreen::create()
         180
     );
 
+    weatherRow.create(
+        lv_screen_active(),
+        0,
+        1513,
+        1080,
+        180
+    );
 
     // Registra presso il repository tutte le entità sensore usate
     // dalla EnergyCard, così il thread di polling in background

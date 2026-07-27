@@ -41,7 +41,7 @@ lv_obj_t* StatusCardsRow::createValueLabel(
 
     lv_obj_set_style_text_color(label, color, 0);
     lv_obj_set_style_text_font(label, &lv_font_montserrat_32, 0);
-    lv_obj_set_pos(label, x, y);
+    lv_obj_align(label, LV_ALIGN_TOP_MID, 0, y);
 
     return label;
 }
@@ -64,12 +64,12 @@ void StatusCardsRow::create(
     condensaCard = createCardContainer(parent, x, y, cardWidth, height);
 
     lv_obj_t* condensaTitle = lv_label_create(condensaCard);
-    lv_label_set_text(condensaTitle, "Limite condensa");
+    lv_label_set_text(condensaTitle, "Limite\n\ncondensa");
     lv_obj_set_style_text_color(condensaTitle, lv_color_hex(0xFF7043), 0);
     lv_obj_set_style_text_font(condensaTitle, &lv_font_montserrat_32, 0);
-    lv_obj_set_pos(condensaTitle, 0, 0);
+    lv_obj_align(condensaTitle, LV_ALIGN_TOP_MID, 0, 0);
 
-    condensaValueLabel = createValueLabel(condensaCard, 0, 30, lv_color_hex(0xFF7043));
+    condensaValueLabel = createValueLabel(condensaCard, 0, 88, lv_color_hex(0xFF7043));
 
 
     // --- Card 2: ACS -------------------------------------------------------
@@ -80,10 +80,10 @@ void StatusCardsRow::create(
     lv_label_set_text(acsTitle, "ACS");
     lv_obj_set_style_text_color(acsTitle, lv_color_white(), 0);
     lv_obj_set_style_text_font(acsTitle, &lv_font_montserrat_32, 0);
-    lv_obj_set_pos(acsTitle, 0, 0);
+    lv_obj_align(acsTitle, LV_ALIGN_TOP_MID, 0, 0);
 
-    acsPdcLabel = createValueLabel(acsCard, 0, 30, lv_color_hex(0xFF5252));
-    acsCasaLabel = createValueLabel(acsCard, 0, 60, lv_color_hex(0xFFA726));
+    acsPdcLabel = createValueLabel(acsCard, 0, 44, lv_color_hex(0xFF5252));
+    acsCasaLabel = createValueLabel(acsCard, 0, 88, lv_color_hex(0xFFA726));
 
 
     // --- Card 3: Impianto ----------------------------------------------
@@ -94,10 +94,10 @@ void StatusCardsRow::create(
     lv_label_set_text(impiantoTitle, "Impianto");
     lv_obj_set_style_text_color(impiantoTitle, lv_color_white(), 0);
     lv_obj_set_style_text_font(impiantoTitle, &lv_font_montserrat_32, 0);
-    lv_obj_set_pos(impiantoTitle, 0, 0);
+    lv_obj_align(impiantoTitle, LV_ALIGN_TOP_MID, 0, 0);
 
-    mandataLabel = createValueLabel(impiantoCard, 0, 30, lv_color_hex(0xFF8C00));
-    ritornoLabel = createValueLabel(impiantoCard, 0, 60, lv_color_hex(0xDAA500));
+    mandataLabel = createValueLabel(impiantoCard, 0, 44, lv_color_hex(0xFF8C00));
+    ritornoLabel = createValueLabel(impiantoCard, 0, 88, lv_color_hex(0xDAA500));
 
 
     // --- Card 4: Allarme -------------------------------------------------
@@ -107,9 +107,10 @@ void StatusCardsRow::create(
     alarmLabel = lv_label_create(alarmCard);
     lv_obj_set_style_text_color(alarmLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(alarmLabel, &lv_font_montserrat_32, 0);
-    lv_obj_set_pos(alarmLabel, 0, 0);
     lv_label_set_long_mode(alarmLabel, LV_LABEL_LONG_WRAP);
     lv_obj_set_width(alarmLabel, cardWidth - 20);
+    lv_obj_set_style_text_align(alarmLabel, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(alarmLabel, LV_ALIGN_TOP_MID, 0, 0);
 
 
     // Registra tutte le entità presso il repository (nessun I/O di rete
@@ -183,17 +184,17 @@ void StatusCardsRow::refresh()
 
     if(alarmState == "armed_night")
     {
-        lv_label_set_text(alarmLabel, "Allarme:\nnotte");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nNOTTE");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x7A4A00), 0);
     }
     else if(alarmState == "armed_away")
     {
-        lv_label_set_text(alarmLabel, "Allarme:\nfuori casa");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nCompleto");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x5E1B1B), 0);
     }
     else if(alarmState == "disarmed")
     {
-        lv_label_set_text(alarmLabel, "Allarme:\ndisinserito");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nDISINSERITO");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x1B5E20), 0);
     }
     else

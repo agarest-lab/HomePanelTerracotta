@@ -47,7 +47,8 @@ HomeAssistantClient::HomeAssistantClient(
     this->token = token;
 }
 
-std::string HomeAssistantClient::getState(
+
+std::string HomeAssistantClient::getRawJson(
     const std::string& entityId
 )
 {
@@ -70,11 +71,6 @@ std::string HomeAssistantClient::getState(
         baseUrl +
         "/api/states/" +
         entityId;
-
-    std::cout
-        << "Request: "
-        << url
-        << std::endl;
 
     struct curl_slist* headers = nullptr;
 
@@ -124,14 +120,17 @@ std::string HomeAssistantClient::getState(
     );
 
 
+    curl_easy_setopt(
+        curl,
+        CURLOPT_TIMEOUT,
+        5L
+    );
+
+
 
     CURLcode result =
         curl_easy_perform(curl);
 
-    std::cout
-        << "HA response: "
-        << response
-        << std::endl;
 
     curl_slist_free_all(headers);
     curl_easy_cleanup(curl);
@@ -149,6 +148,54 @@ std::string HomeAssistantClient::getState(
     }
 
 
+    return response;
+}
+
+
+bool HomeAssistantClient::callService(
+    const std::string& domain,
+    const std::string& service,
+    const std::string& entityId
+)
+{
+    CURL* curl = curl_easy_init();
+    if(!curl) return false;
+
+    std::string url = baseUrl + "/api/services/" + domain + "/" + service;
+
+    json body;
+    body["entity_id"] = entityId;
+    std::string payload = body.dump();
+
+    std::string response;
+    struct curl_slist* headers = nullptr;
+    std::string auth = "Authorization: Bearer " + token;
+    headers = curl_slist_append(headers, auth.c_str());
+    headers = curl_slist_append(headers, "Content-Type: application/json");
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload.c_str());
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
+
+    CURLcode result = curl_easy_perform(curl);
+
+    curl_slist_free_all(headers);
+    curl_easy_cleanup(curl);
+
+    return result == CURLE_OK;
+}
+
+
+std::string HomeAssistantClient::getState(
+    const std::string& entityId
+)
+{
+    std::string response = getRawJson(entityId);
+
+    if(response.empty())
+        return "";
 
     try
     {
@@ -231,48 +278,8 @@ float HomeAssistantClient::getFloatState(
     }
 }
 
-// HomeAssistantClient.cpp — aggiungi:
 
-bool HomeAssistantClient::getBoolState(const std::string& entityId)
-{
-    std::string state = getState(entityId);
-    return state == "on";
-}
 
-bool HomeAssistantClient::callService(
-    const std::string& domain,
-    const std::string& service,
-    const std::string& entityId
-)
-{
-    CURL* curl = curl_easy_init();
-    if(!curl) return false;
-
-    std::string url = baseUrl + "/api/services/" + domain + "/" + service;
-
-    json body;
-    body["entity_id"] = entityId;
-    std::string payload = body.dump();
-
-    std::string response;
-    struct curl_slist* headers = nullptr;
-    std::string auth = "Authorization: Bearer " + token;
-    headers = curl_slist_append(headers, auth.c_str());
-    headers = curl_slist_append(headers, "Content-Type: application/json");
-
-    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, payload.c_str());
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
-
-    CURLcode result = curl_easy_perform(curl);
-
-    curl_slist_free_all(headers);
-    curl_easy_cleanup(curl);
-
-    return result == CURLE_OK;
-}
 
 int HomeAssistantClient::getIntState(
     const std::string& entityId

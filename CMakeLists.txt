@@ -47,6 +47,8 @@ add_executable(HomePanel
 
     src/assets/montserrat_orario_140.c
 
+    src/ui/widgets/WeatherCardsRow.cpp
+
 )
 
 find_package(CURL REQUIRED)

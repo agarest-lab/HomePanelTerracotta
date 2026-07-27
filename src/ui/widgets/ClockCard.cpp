@@ -36,13 +36,13 @@ void ClockCard::create(
     timeLabel = lv_label_create(card);
     lv_obj_set_style_text_color(timeLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(timeLabel, &montserrat_orario_140, 0);
-    lv_obj_set_pos(timeLabel, 10, 10);
+    lv_obj_align(timeLabel, LV_ALIGN_TOP_MID, 0, 50);
 
 
     dateLabel = lv_label_create(card);
     lv_obj_set_style_text_color(dateLabel, lv_color_white(), 0);
-    lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_20, 0);
-    lv_obj_set_pos(dateLabel, 15, 190);
+    lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(dateLabel, LV_ALIGN_BOTTOM_MID, 0, -30);
 
 
     update();

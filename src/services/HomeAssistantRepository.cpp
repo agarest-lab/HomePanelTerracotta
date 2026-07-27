@@ -1,7 +1,12 @@
 #include "HomeAssistantRepository.h"
 
+#include <nlohmann/json.hpp>
+
 #include <chrono>
 #include <iostream>
+
+
+using json = nlohmann::json;
 
 
 HomeAssistantRepository& HomeAssistantRepository::instance()
@@ -24,7 +29,7 @@ void HomeAssistantRepository::watch(const std::string& entityId)
     for(const auto& id : watchedEntities)
     {
         if(id == entityId)
-            return; // già registrata, evitiamo duplicati
+            return;
     }
 
     watchedEntities.push_back(entityId);
@@ -34,7 +39,7 @@ void HomeAssistantRepository::watch(const std::string& entityId)
 void HomeAssistantRepository::start()
 {
     if(running)
-        return; // già avviato
+        return;
 
     running = true;
 
@@ -76,16 +81,15 @@ void HomeAssistantRepository::pollLoop()
             if(!running)
                 break;
 
-            // Questa è l'unica chiamata di rete bloccante: gira su un
-            // thread dedicato, quindi non blocca mai LVGL/SDL.
-            std::string value = client.getState(entityId);
+            std::string rawJson = client.getRawJson(entityId);
 
-            std::lock_guard<std::mutex> lock(stateMutex);
-            states[entityId] = value;
+            if(!rawJson.empty())
+            {
+                std::lock_guard<std::mutex> lock(stateMutex);
+                rawJsonCache[entityId] = rawJson;
+            }
         }
 
-        // Attesa suddivisa in piccoli intervalli, così stop() risponde
-        // rapidamente invece di dover aspettare fino a 2 secondi pieni.
         for(int i = 0; i < 20 && running; i++)
         {
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -115,22 +119,14 @@ void HomeAssistantRepository::commandLoop()
             commandQueue.pop();
         }
 
-        std::cout
-            << "Invio comando: "
-            << cmd.domain << "." << cmd.service
-            << " -> " << cmd.entityId
-            << std::endl;
-
         client.callService(cmd.domain, cmd.service, cmd.entityId);
 
-        // Dopo il comando, rileggiamo lo stato reale per confermare/correggere
-        // quello ottimistico già scritto in cache al momento della richiesta.
-        std::string confirmedState = client.getState(cmd.entityId);
+        std::string confirmedJson = client.getRawJson(cmd.entityId);
 
-        if(!confirmedState.empty())
+        if(!confirmedJson.empty())
         {
             std::lock_guard<std::mutex> lock(stateMutex);
-            states[cmd.entityId] = confirmedState;
+            rawJsonCache[cmd.entityId] = confirmedJson;
         }
     }
 }
@@ -143,11 +139,16 @@ void HomeAssistantRepository::requestServiceCall(
     const std::string& optimisticState
 )
 {
-    // Aggiorna subito la cache: la UI vedrà il nuovo stato al prossimo
-    // refresh, senza dover aspettare la risposta di rete.
+    // Costruisce un JSON minimale "ottimistico" così getState() continua
+    // a funzionare subito, senza aspettare la conferma di rete.
     {
         std::lock_guard<std::mutex> lock(stateMutex);
-        states[entityId] = optimisticState;
+
+        json optimistic;
+        optimistic["state"] = optimisticState;
+        optimistic["attributes"] = json::object();
+
+        rawJsonCache[entityId] = optimistic.dump();
     }
 
     {
@@ -161,14 +162,32 @@ void HomeAssistantRepository::requestServiceCall(
 
 std::string HomeAssistantRepository::getState(const std::string& entityId) const
 {
-    std::lock_guard<std::mutex> lock(stateMutex);
+    std::string rawJson;
 
-    auto it = states.find(entityId);
+    {
+        std::lock_guard<std::mutex> lock(stateMutex);
 
-    if(it == states.end())
+        auto it = rawJsonCache.find(entityId);
+
+        if(it == rawJsonCache.end())
+            return "";
+
+        rawJson = it->second;
+    }
+
+    try
+    {
+        json data = json::parse(rawJson);
+
+        if(!data.contains("state"))
+            return "";
+
+        return data["state"].get<std::string>();
+    }
+    catch(const std::exception&)
+    {
         return "";
-
-    return it->second;
+    }
 }
 
 
@@ -193,4 +212,52 @@ float HomeAssistantRepository::getFloatState(const std::string& entityId) const
 bool HomeAssistantRepository::getBoolState(const std::string& entityId) const
 {
     return getState(entityId) == "on";
+}
+
+
+std::string HomeAssistantRepository::getAttribute(
+    const std::string& entityId,
+    const std::string& attributeName
+) const
+{
+    std::string rawJson;
+
+    {
+        std::lock_guard<std::mutex> lock(stateMutex);
+
+        auto it = rawJsonCache.find(entityId);
+
+        if(it == rawJsonCache.end())
+            return "";
+
+        rawJson = it->second;
+    }
+
+    try
+    {
+        json data = json::parse(rawJson);
+
+        if(!data.contains("attributes"))
+            return "";
+
+        const json& attributes = data["attributes"];
+
+        if(!attributes.contains(attributeName))
+            return "";
+
+        const json& value = attributes[attributeName];
+
+        if(value.is_string())
+            return value.get<std::string>();
+
+        if(value.is_null())
+            return "";
+
+        // Numeri, bool, ecc: rappresentazione testuale semplice
+        return value.dump();
+    }
+    catch(const std::exception&)
+    {
+        return "";
+    }
 }

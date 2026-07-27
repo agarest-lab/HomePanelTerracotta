@@ -93,22 +93,22 @@ void EnergyCard::create(
 
     lblPowerFlow =
         createLabel(
-            420,
-            25
+            760,
+            40
         );
 
 
     lblPV =
         createLabel(
             10,
-            80
+            170
         );
 
 
     lblBattery =
         createLabel(
-            140,
-            280
+            160,
+            580
         );
 
 
@@ -121,29 +121,29 @@ void EnergyCard::create(
 
     lblLiving =
         createLabel(
-            320,
-            90
+            550,
+            200
         );
 
 
     lblNight =
         createLabel(
-            320,
-            40
+            550,
+            100
         );
 
 
     lblCar =
         createLabel(
-            470,
-            270
+            900,
+            490
         );
 
 
     lblInverter =
         createLabel(
-            320,
-            280
+            520,
+            530
         );
 
 }

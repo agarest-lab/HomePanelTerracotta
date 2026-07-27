@@ -4,6 +4,7 @@
 #include "../widgets/EntityButtonRow.h"
 #include "../widgets/StatusCardsRow.h"
 #include "../../data/EnergyData.h"
+#include "../widgets/WeatherCardsRow.h"
 
 
 class HomeScreen
@@ -30,5 +31,6 @@ private:
     EntityButtonRow socketsRow;
 
     StatusCardsRow statusRow;
+    WeatherCardsRow weatherRow;
 
 };
