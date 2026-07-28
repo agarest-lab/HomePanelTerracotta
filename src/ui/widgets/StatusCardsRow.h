@@ -1,7 +1,5 @@
 #pragma once
-
 #include <lvgl.h>
-
 
 // Riga di 4 card affiancate, larghe quanto lo schermo, che mostrano:
 // - Limite anticondensa (valore singolo)

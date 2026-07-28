@@ -1,9 +1,7 @@
 #include "HomeScreen.h"
 #include "../../services/HomeAssistantRepository.h"
-
 #include <iostream>
 #include <lvgl.h>
-
 
 void HomeScreen::create()
 {
@@ -40,24 +38,25 @@ void HomeScreen::create()
         0,
         1323,
         1080,
-        180
+        150
     );
 
     weatherRow.create(
         lv_screen_active(),
         0,
-        1513,
+        1483,
         1080,
-        180
+        150
     );
 
     calendarCard.create(
         lv_screen_active(),
         0,
-        1703,
+        1643,
         1080,
-        220
+        240
     );
+
 
     // Registra presso il repository tutte le entità sensore usate
     // dalla EnergyCard, così il thread di polling in background

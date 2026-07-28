@@ -179,6 +179,9 @@ bool HomeAssistantClient::callService(
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
+    curl_easy_setopt(curl, CURLOPT_TIMEOUT, 5L);
+    curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, 3L);
+
     CURLcode result = curl_easy_perform(curl);
 
     curl_slist_free_all(headers);

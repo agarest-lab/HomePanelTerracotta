@@ -34,5 +34,4 @@ private:
     StatusCardsRow statusRow;
     WeatherCardsRow weatherRow;
     CalendarCard calendarCard;
-
 };

@@ -72,7 +72,7 @@ void CalendarCard::create(
 
     refresh();
 
-    updateTimer = lv_timer_create(timerCallback, 30000, this);
+    // updateTimer = lv_timer_create(timerCallback, 3000, this);
 }
 
 

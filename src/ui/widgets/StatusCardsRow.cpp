@@ -1,9 +1,7 @@
 #include "StatusCardsRow.h"
 #include "../../services/HomeAssistantRepository.h"
-
 #include <cstdio>
 #include <cstring>
-
 
 lv_obj_t* StatusCardsRow::createCardContainer(
     lv_obj_t* parent,
@@ -29,7 +27,6 @@ lv_obj_t* StatusCardsRow::createCardContainer(
     return card;
 }
 
-
 lv_obj_t* StatusCardsRow::createValueLabel(
     lv_obj_t* parent,
     int x,
@@ -46,7 +43,6 @@ lv_obj_t* StatusCardsRow::createValueLabel(
     return label;
 }
 
-
 void StatusCardsRow::create(
     lv_obj_t* parent,
     int x,
@@ -57,7 +53,6 @@ void StatusCardsRow::create(
 {
     const int gap = 12;
     const int cardWidth = (width - gap * 3) / 4;
-
 
     // --- Card 1: Limite condensa -----------------------------------------
 
@@ -70,7 +65,6 @@ void StatusCardsRow::create(
     lv_obj_align(condensaTitle, LV_ALIGN_TOP_MID, 0, 0);
 
     condensaValueLabel = createValueLabel(condensaCard, 0, 88, lv_color_hex(0xFF7043));
-
 
     // --- Card 2: ACS -------------------------------------------------------
 
@@ -85,7 +79,6 @@ void StatusCardsRow::create(
     acsPdcLabel = createValueLabel(acsCard, 0, 44, lv_color_hex(0xFF5252));
     acsCasaLabel = createValueLabel(acsCard, 0, 88, lv_color_hex(0xFFA726));
 
-
     // --- Card 3: Impianto ----------------------------------------------
 
     impiantoCard = createCardContainer(parent, x + 2 * (cardWidth + gap), y, cardWidth, height);
@@ -99,7 +92,6 @@ void StatusCardsRow::create(
     mandataLabel = createValueLabel(impiantoCard, 0, 44, lv_color_hex(0xFF8C00));
     ritornoLabel = createValueLabel(impiantoCard, 0, 88, lv_color_hex(0xDAA500));
 
-
     // --- Card 4: Allarme -------------------------------------------------
 
     alarmCard = createCardContainer(parent, x + 3 * (cardWidth + gap), y, cardWidth, height);
@@ -112,7 +104,6 @@ void StatusCardsRow::create(
     lv_obj_set_style_text_align(alarmLabel, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_align(alarmLabel, LV_ALIGN_TOP_MID, 0, 0);
 
-
     // Registra tutte le entità presso il repository (nessun I/O di rete
     // dal thread grafico: il polling in background le tiene aggiornate)
     auto& repo = HomeAssistantRepository::instance();
@@ -124,12 +115,10 @@ void StatusCardsRow::create(
     repo.watch("sensor.ritorno_casa");
     repo.watch("alarm_control_panel.80_000_zone_1_alarm");
 
-
     refresh();
 
     updateTimer = lv_timer_create(timerCallback, 2000, this);
 }
-
 
 void StatusCardsRow::refresh()
 {
@@ -137,13 +126,11 @@ void StatusCardsRow::refresh()
 
     char buf[64];
 
-
     // --- Limite condensa ---
 
     float condensa = repo.getFloatState("sensor.ur_limite_anticondensa");
     std::snprintf(buf, sizeof(buf), "%.1f °C", condensa);
     lv_label_set_text(condensaValueLabel, buf);
-
 
     // --- ACS ---
 
@@ -164,7 +151,6 @@ void StatusCardsRow::refresh()
     {
         lv_obj_set_style_bg_color(acsCard, lv_color_hex(0x5E1B1B), 0);   // rosso scuro
     }
-
 
     // --- Impianto ---
 
