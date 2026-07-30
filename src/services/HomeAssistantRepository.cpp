@@ -1,13 +1,9 @@
 #include "HomeAssistantRepository.h"
-
 #include <nlohmann/json.hpp>
-
 #include <chrono>
 #include <iostream>
 
-
 using json = nlohmann::json;
-
 
 HomeAssistantRepository& HomeAssistantRepository::instance()
 {
@@ -15,12 +11,10 @@ HomeAssistantRepository& HomeAssistantRepository::instance()
     return repository;
 }
 
-
 HomeAssistantRepository::~HomeAssistantRepository()
 {
     stop();
 }
-
 
 void HomeAssistantRepository::watch(const std::string& entityId)
 {
@@ -35,7 +29,6 @@ void HomeAssistantRepository::watch(const std::string& entityId)
     watchedEntities.push_back(entityId);
 }
 
-
 void HomeAssistantRepository::start()
 {
     if(running)
@@ -46,7 +39,6 @@ void HomeAssistantRepository::start()
     pollThread = std::thread(&HomeAssistantRepository::pollLoop, this);
     commandThread = std::thread(&HomeAssistantRepository::commandLoop, this);
 }
-
 
 void HomeAssistantRepository::stop()
 {
@@ -63,7 +55,6 @@ void HomeAssistantRepository::stop()
     if(commandThread.joinable())
         commandThread.join();
 }
-
 
 void HomeAssistantRepository::pollLoop()
 {
@@ -96,7 +87,6 @@ void HomeAssistantRepository::pollLoop()
         }
     }
 }
-
 
 void HomeAssistantRepository::commandLoop()
 {
@@ -131,7 +121,6 @@ void HomeAssistantRepository::commandLoop()
     }
 }
 
-
 void HomeAssistantRepository::requestServiceCall(
     const std::string& domain,
     const std::string& service,
@@ -158,7 +147,6 @@ void HomeAssistantRepository::requestServiceCall(
 
     commandCv.notify_one();
 }
-
 
 std::string HomeAssistantRepository::getState(const std::string& entityId) const
 {
@@ -190,7 +178,6 @@ std::string HomeAssistantRepository::getState(const std::string& entityId) const
     }
 }
 
-
 float HomeAssistantRepository::getFloatState(const std::string& entityId) const
 {
     std::string value = getState(entityId);
@@ -208,12 +195,10 @@ float HomeAssistantRepository::getFloatState(const std::string& entityId) const
     }
 }
 
-
 bool HomeAssistantRepository::getBoolState(const std::string& entityId) const
 {
     return getState(entityId) == "on";
 }
-
 
 std::string HomeAssistantRepository::getAttribute(
     const std::string& entityId,

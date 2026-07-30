@@ -35,12 +35,10 @@ void Application::run()
 
     uint32_t lastUpdate = 0;
 
-
     while(true)
     {
 
         display.loop();
-
 
         uint32_t now =
             SDL_GetTicks();

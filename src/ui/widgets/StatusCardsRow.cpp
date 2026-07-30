@@ -129,7 +129,7 @@ void StatusCardsRow::refresh()
     // --- Limite condensa ---
 
     float condensa = repo.getFloatState("sensor.ur_limite_anticondensa");
-    std::snprintf(buf, sizeof(buf), "%.1f °C", condensa);
+    std::snprintf(buf, sizeof(buf), "%.1f %", condensa);
     lv_label_set_text(condensaValueLabel, buf);
 
     // --- ACS ---

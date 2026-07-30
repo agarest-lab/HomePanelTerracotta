@@ -1,11 +1,9 @@
 #pragma once
 
-#include "../widgets/EnergyCard.h"
-#include "../widgets/EntityButtonRow.h"
+#include "../widgets/EnergyGaugesPanel.h"
+#include "../widgets/ToggleRow.h"
 #include "../widgets/StatusCardsRow.h"
-#include "../../data/EnergyData.h"
 #include "../widgets/WeatherCardsRow.h"
-#include "../widgets/CalendarCard.h"
 
 
 class HomeScreen
@@ -25,13 +23,10 @@ private:
 
     lv_timer_t* updateTimer = nullptr;
 
-    EnergyCard energyCard;
-    EnergyData energyData;
-
-    EntityButtonRow lightsRow;
-    EntityButtonRow socketsRow;
-
+    EnergyGaugesPanel energyGauges;
+    ToggleRow lightsRow;
+    ToggleRow socketsRow;
     StatusCardsRow statusRow;
     WeatherCardsRow weatherRow;
-    CalendarCard calendarCard;
+
 };

@@ -34,7 +34,7 @@
  *  - LV_STDLIB_RTTHREAD: RT-Thread functions malloc/realloc/free
  *  - LV_STDLIB_CUSTOM: Implement the functions externally
  */
-#define LV_USE_STDLIB_MALLOC LV_STDLIB_BUILTIN
+#define LV_USE_STDLIB_MALLOC LV_STDLIB_CLIB
 
 /** String functions source
  *  Possible values:

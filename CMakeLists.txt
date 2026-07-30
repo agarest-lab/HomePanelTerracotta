@@ -30,13 +30,14 @@ add_executable(HomePanel
     src/services/HomeAssistantClient.cpp
     src/services/HomeAssistantRepository.cpp
     src/services/CameraFeed.cpp
-    src/ui/widgets/EnergyCard.cpp
-    src/ui/widgets/EntityButtonRow.cpp
-    src/assets/energy_bg.c
     src/assets/montserrat_orario_140.c
     src/ui/widgets/WeatherCardsRow.cpp
     src/services/CalendarFeed.cpp
     src/ui/widgets/CalendarCard.cpp
+    src/ui/widgets/EnergyGaugesPanel.h
+    src/ui/widgets/ToggleRow.cpp
+    src/ui/widgets/ToggleRow.h
+    src/ui/widgets/EnergyGaugesPanel.cpp
 )
 
 find_package(CURL REQUIRED)
