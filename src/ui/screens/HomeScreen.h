@@ -4,7 +4,11 @@
 #include "../widgets/ToggleRow.h"
 #include "../widgets/StatusCardsRow.h"
 #include "../widgets/WeatherCardsRow.h"
-
+#include "../widgets/DayNightCardsRow.h"
+#include "../widgets/CarStatusCard.h"
+#include "../widgets/MotionLedsRow.h"
+#include "../widgets/CalendarCard.h"
+#include "../widgets/WashingMachineCard.h"
 
 class HomeScreen
 {
@@ -28,5 +32,10 @@ private:
     ToggleRow socketsRow;
     StatusCardsRow statusRow;
     WeatherCardsRow weatherRow;
+    DayNightCardsRow dayNightRow;
+    CarStatusCard carStatusCard;
+    MotionLedsRow motionLeds;
+    CalendarCard calendarCard;
+    WashingMachineCard washingMachine;
 
 };

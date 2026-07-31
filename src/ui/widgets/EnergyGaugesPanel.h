@@ -3,8 +3,6 @@
 #include <lvgl.h>
 
 
-// Pannello con 4 gauge ad arco (Casa, Fotovoltaico, Batteria, Rete)
-// che sostituisce l'immagine di sfondo di EnergyCard con widget LVGL nativi.
 class EnergyGaugesPanel
 {
 
@@ -27,7 +25,12 @@ private:
         lv_obj_t* card = nullptr;
         lv_obj_t* arc = nullptr;
         lv_obj_t* valueLabel = nullptr;
+        lv_obj_t* extraLabel = nullptr;   // riga sopra al subLabel (usata solo dalla Rete)
         lv_obj_t* subLabel = nullptr;
+
+        // Usati solo dal gauge Casa, per il gauge interno più piccolo
+        lv_obj_t* innerArc = nullptr;
+        lv_obj_t* innerValueLabel = nullptr;
     };
 
     Gauge houseGauge;
@@ -54,7 +57,8 @@ private:
         int maxValue,
         const char* valueText,
         const char* subText,
-        lv_color_t arcColor
+        lv_color_t arcColor,
+        lv_color_t subTextColor
     );
 
 };

@@ -36,7 +36,7 @@ void ToggleRow::create(
         lv_obj_set_size(sw, 100, 50);
         lv_obj_align(sw, LV_ALIGN_BOTTOM_MID, 0, -6);
 
-        lv_obj_set_style_bg_color(sw, lv_color_hex(0xFFC107), LV_PART_INDICATOR | LV_STATE_CHECKED);
+        lv_obj_set_style_bg_color(sw, lv_color_hex(0x07c1ff), LV_PART_INDICATOR | LV_STATE_CHECKED);
 
         ToggleEntry entry;
         entry.sw = sw;

@@ -38,6 +38,10 @@ add_executable(HomePanel
     src/ui/widgets/ToggleRow.cpp
     src/ui/widgets/ToggleRow.h
     src/ui/widgets/EnergyGaugesPanel.cpp
+    src/ui/widgets/DayNightCardsRow.cpp
+    src/ui/widgets/CarStatusCard.cpp
+    src/ui/widgets/MotionLedsRow.cpp
+    src/ui/widgets/WashingMachineCard.cpp
 )
 
 find_package(CURL REQUIRED)
