@@ -41,7 +41,7 @@ void CalendarCard::create(
     lv_obj_t* title = lv_label_create(card);
     lv_label_set_text(title, "Impegni");
     lv_obj_set_style_text_color(title, lv_color_hex(0xD8D8D8), 0);
-    lv_obj_set_style_text_font(title, &lv_font_montserrat_32, 0);
+    lv_obj_set_style_text_font(title, &lv_font_montserrat_36, 0);
     lv_obj_set_pos(title, 0, 0);
 
 
@@ -109,14 +109,14 @@ void CalendarCard::refresh()
         lv_obj_t* dateLabel = lv_label_create(row);
         lv_label_set_text(dateLabel, dateTimeBuf);
         lv_obj_set_style_text_color(dateLabel, colorForCalendar(ev.calendarId), 0);
-        lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_20, 0);
+        lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_24, 0);
         lv_obj_set_pos(dateLabel, 0, 0);
 
         lv_obj_t* summaryLabel = lv_label_create(row);
         lv_label_set_text(summaryLabel, ev.summary.c_str());
         lv_obj_set_style_text_color(summaryLabel, lv_color_white(), 0);
-        lv_obj_set_style_text_font(summaryLabel, &lv_font_montserrat_20, 0);
-        lv_obj_set_pos(summaryLabel, 250, 0);
+        lv_obj_set_style_text_font(summaryLabel, &lv_font_montserrat_24, 0);
+        lv_obj_set_pos(summaryLabel, 270, 0);
 
         count++;
     }
@@ -126,7 +126,7 @@ void CalendarCard::refresh()
         lv_obj_t* emptyLabel = lv_label_create(listContainer);
         lv_label_set_text(emptyLabel, "Nessun impegno nei prossimi 7 giorni");
         lv_obj_set_style_text_color(emptyLabel, lv_color_hex(0x808080), 0);
-        lv_obj_set_style_text_font(emptyLabel, &lv_font_montserrat_20, 0);
+        lv_obj_set_style_text_font(emptyLabel, &lv_font_montserrat_24, 0);
     }
 }
 

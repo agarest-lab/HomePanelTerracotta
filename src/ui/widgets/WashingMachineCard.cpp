@@ -91,8 +91,8 @@ void WashingMachineCard::create(
     repo.watch(POWER_SENSOR);
 
 
-    lv_obj_add_flag(card, LV_OBJ_FLAG_CLICKABLE);
-    lv_obj_add_event_cb(card, onClick, LV_EVENT_CLICKED, this);
+    // lv_obj_add_flag(card, LV_OBJ_FLAG_CLICKABLE);
+    // lv_obj_add_event_cb(card, onClick, LV_EVENT_CLICKED, this);
 
 
     refresh();
@@ -118,6 +118,7 @@ void WashingMachineCard::refresh()
 }
 
 
+/*
 void WashingMachineCard::onClick(lv_event_t* e)
 {
     WashingMachineCard* self =
@@ -137,7 +138,7 @@ void WashingMachineCard::onClick(lv_event_t* e)
 
     repo.requestServiceCall("switch", service, SWITCH_ENTITY, optimisticState);
 }
-
+*/
 
 void WashingMachineCard::timerCallback(lv_timer_t* timer)
 {

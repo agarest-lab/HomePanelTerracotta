@@ -13,13 +13,14 @@ void HomeScreen::create()
 
     motionLeds.create(
         lv_screen_active(),
-        650,
-        305,
+        500,     // colonna tra ClockCard (finisce a 480) e CameraCard (inizia a 560)
+        30,      // partenza in alto, allineata circa con l'inizio delle card
         {
             { "binary_sensor.ezviz_esterna_movimento_2", "Esterna" },
             { "binary_sensor.ezviz_terrazzo_movimento",  "Terrazzo" },
             { "binary_sensor.cam_garage_movimento_2",    "Garage" },
-        }
+        },
+        true   // <-- layout verticale
     );
 
     // Gauge energia: sostituisce EnergyCard, subito sotto clock/camera
@@ -27,11 +28,11 @@ void HomeScreen::create()
     energyGauges.create(
         lv_screen_active(),
         0,
-        390,
+        330,
         1080
     );
 
-    lightsRow.create(lv_screen_active(), 0, 780, {
+    lightsRow.create(lv_screen_active(), 0, 720, {
         { "switch.led_cucina_switch_0",          "switch", "Led cucina" },
         { "switch.penisola_switch_0",            "switch", "Penisola" },
         { "switch.deviatore_wi_fi_ble_switch_1", "switch", "Soggiorno" },
@@ -39,7 +40,7 @@ void HomeScreen::create()
         { "switch.luce_armadio_switch_0",        "switch", "Armadio" },
     });
     
-    socketsRow.create(lv_screen_active(), 0, 920, {
+    socketsRow.create(lv_screen_active(), 0, 860, {
         { "switch.lampada_presa",         "switch", "Lampada" },
         { "switch.luce_garage_switch_0",  "switch", "Garage" },
         { "switch.luce_scala_switch_0",   "switch", "Scala" },
@@ -49,7 +50,7 @@ void HomeScreen::create()
     washingMachine.create(
         lv_screen_active(),
         27 + 4 * (200 + 13),   // x del 5° slot della riga (stessi TOGGLE_WIDTH/GAP di ToggleRow)
-        920,                   // <-- stessa Y usata per socketsRow.create(...)
+        860,                   // <-- stessa Y usata per socketsRow.create(...)
         195,
         120                    // stesse dimensioni dei toggle
     );
@@ -57,7 +58,7 @@ void HomeScreen::create()
     statusRow.create(
         lv_screen_active(),
         0,
-        1060,
+        1000,
         1080,
         150
     );
@@ -65,7 +66,7 @@ void HomeScreen::create()
     weatherRow.create(
         lv_screen_active(),
         0,
-        1230,
+        1170,
         1080,
         150
     );
@@ -73,7 +74,7 @@ void HomeScreen::create()
     dayNightRow.create(
         lv_screen_active(),
         0,
-        1400,
+        1340,
         715,
         150
     );
@@ -81,7 +82,7 @@ void HomeScreen::create()
     carStatusCard.create(
         lv_screen_active(),
         730,
-        1400,     // <-- sotto dayNightRow, verifica tu la posizione esatta
+        1340,     // <-- sotto dayNightRow, verifica tu la posizione esatta
         350,
         150      // altezza indicativa
     );
@@ -89,9 +90,9 @@ void HomeScreen::create()
     calendarCard.create(
         lv_screen_active(),
         0,
-        1560,     // <-- sotto tutto il resto, verifica tu la posizione
+        1500,     // <-- sotto tutto il resto, verifica tu la posizione
         1080,
-        360
+        400
     );
 
     updateTimer =

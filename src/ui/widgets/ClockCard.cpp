@@ -25,7 +25,7 @@ void ClockCard::create(
 {
     card = lv_obj_create(parent);
 
-    lv_obj_set_size(card, 540, 280);
+    lv_obj_set_size(card, 460, 280);
     lv_obj_set_pos(card, x, y);
 
     lv_obj_set_style_bg_opa(card, LV_OPA_TRANSP, 0);

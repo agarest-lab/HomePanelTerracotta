@@ -17,11 +17,14 @@ class MotionLedsRow
 
 public:
 
+    // vertical = true: i LED vengono impilati in colonna invece che
+    // affiancati in riga (utile per spazi stretti, es. tra due card).
     void create(
         lv_obj_t* parent,
         int x,
         int y,
-        const std::vector<MotionSensorConfig>& configs
+        const std::vector<MotionSensorConfig>& configs,
+        bool vertical = false
     );
 
     void refresh();

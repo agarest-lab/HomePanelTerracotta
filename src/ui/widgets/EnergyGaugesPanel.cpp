@@ -222,7 +222,7 @@ void EnergyGaugesPanel::refresh()
     if(extraClamped < 0) extraClamped = 0;
     if(extraClamped > 4000) extraClamped = 4000;
 
-    lv_arc_set_value(houseGauge.innerArc, (extraClamped * 100) / 3000);
+    lv_arc_set_value(houseGauge.innerArc, (extraClamped * 100) / 4000);
 
     char innerBuf[16];
     std::snprintf(innerBuf, sizeof(innerBuf), "%.1f kW", extraPowerKw);

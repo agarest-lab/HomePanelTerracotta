@@ -33,7 +33,7 @@ private:
 
     lv_timer_t* updateTimer = nullptr;
 
-    static void onClick(lv_event_t* e);
+    static void onClick(lv_event_t* e);  // disabilitato su .cpp per non spegnere per sbaglio
     static void timerCallback(lv_timer_t* timer);
 
 };
