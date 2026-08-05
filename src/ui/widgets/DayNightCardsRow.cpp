@@ -4,6 +4,9 @@
 #include <cstdio>
 
 
+static const int GAP = 16;
+
+
 lv_obj_t* DayNightCardsRow::createCardContainer(
     lv_obj_t* parent,
     int x,
@@ -22,14 +25,14 @@ lv_obj_t* DayNightCardsRow::createCardContainer(
     lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(card, 0, 0);
     lv_obj_set_style_radius(card, 16, 0);
-    lv_obj_set_style_pad_all(card, 10, 0);
+    lv_obj_set_style_pad_all(card, 8, 0);
 
     lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
     lv_obj_t* titleLabel = lv_label_create(card);
     lv_label_set_text(titleLabel, title);
     lv_obj_set_style_text_color(titleLabel, lv_color_hex(0xD8D8D8), 0);
-    lv_obj_set_style_text_font(titleLabel, &lv_font_montserrat_28, 0);
+    lv_obj_set_style_text_font(titleLabel, &lv_font_montserrat_32, 0);
     lv_obj_align(titleLabel, LV_ALIGN_TOP_MID, 0, 0);
 
     return card;
@@ -40,37 +43,36 @@ void DayNightCardsRow::create(
     lv_obj_t* parent,
     int x,
     int y,
-    int width,
+    int cardWidth,
     int height
 )
 {
-    const int gap = 15;
-    const int cardWidth = (width - gap) / 2;
-
     dayCard = createCardContainer(parent, x, y, cardWidth, height, "Giorno");
 
     dayTempLabel = lv_label_create(dayCard);
     lv_obj_set_style_text_color(dayTempLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(dayTempLabel, &lv_font_montserrat_32, 0);
-    lv_obj_align(dayTempLabel, LV_ALIGN_TOP_MID, 0, 40);
+    lv_obj_align(dayTempLabel, LV_ALIGN_TOP_MID, 0, 44);
 
     dayHumLabel = lv_label_create(dayCard);
     lv_obj_set_style_text_color(dayHumLabel, lv_color_hex(0xA0A0A0), 0);
-    lv_obj_set_style_text_font(dayHumLabel, &lv_font_montserrat_28, 0);
-    lv_obj_align(dayHumLabel, LV_ALIGN_TOP_MID, 0, 84);
+    lv_obj_set_style_text_font(dayHumLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(dayHumLabel, LV_ALIGN_TOP_MID, 0, 88);
 
 
-    nightCard = createCardContainer(parent, x + (cardWidth + gap), y, cardWidth, height, "Notte");
+    int nightX = x + cardWidth + GAP;
+
+    nightCard = createCardContainer(parent, nightX, y, cardWidth, height, "Notte");
 
     nightTempLabel = lv_label_create(nightCard);
     lv_obj_set_style_text_color(nightTempLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(nightTempLabel, &lv_font_montserrat_32, 0);
-    lv_obj_align(nightTempLabel, LV_ALIGN_TOP_MID, 0, 40);
+    lv_obj_align(nightTempLabel, LV_ALIGN_TOP_MID, 0, 44);
 
     nightHumLabel = lv_label_create(nightCard);
     lv_obj_set_style_text_color(nightHumLabel, lv_color_hex(0xA0A0A0), 0);
-    lv_obj_set_style_text_font(nightHumLabel, &lv_font_montserrat_28, 0);
-    lv_obj_align(nightHumLabel, LV_ALIGN_TOP_MID, 0, 84);
+    lv_obj_set_style_text_font(nightHumLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(nightHumLabel, LV_ALIGN_TOP_MID, 0, 88);
 
 
     auto& repo = HomeAssistantRepository::instance();

@@ -310,13 +310,13 @@ void EnergyGaugesPanel::refresh()
     lv_color_t gridArcColor;
     lv_color_t gridSubColor;
 
-    if(gridPower > 2)
+    if(gridPower > 10)
     {
         std::snprintf(subBuf, sizeof(subBuf), "In immissione");
         gridArcColor = COLOR_GREEN;
         gridSubColor = COLOR_GREEN;
     }
-    else if(gridPower < -2)
+    else if(gridPower < -10)
     {
         std::snprintf(subBuf, sizeof(subBuf), "In prelievo");
         gridArcColor = lv_color_hex(0xFF7043);

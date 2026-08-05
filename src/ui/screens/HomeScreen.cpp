@@ -71,20 +71,28 @@ void HomeScreen::create()
         150
     );
 
-    dayNightRow.create(
+    weatherIcon.create(
         lv_screen_active(),
         0,
         1340,
-        715,
+        230,
+        150
+    );
+
+    dayNightRow.create(
+        lv_screen_active(),
+        248,     // 227 + 12 di gap
+        1340,
+        227,     // larghezza di CIASCUNA delle due card (Giorno e Notte)
         150
     );
 
     carStatusCard.create(
         lv_screen_active(),
         730,
-        1340,     // <-- sotto dayNightRow, verifica tu la posizione esatta
+        1340,
         350,
-        150      // altezza indicativa
+        150
     );
 
     calendarCard.create(

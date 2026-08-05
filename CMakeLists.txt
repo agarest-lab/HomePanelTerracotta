@@ -39,6 +39,7 @@ add_executable(HomePanel
     src/ui/widgets/ToggleRow.h
     src/ui/widgets/EnergyGaugesPanel.cpp
     src/ui/widgets/DayNightCardsRow.cpp
+    src/ui/widgets/WeatherIconCard.cpp
     src/ui/widgets/CarStatusCard.cpp
     src/ui/widgets/MotionLedsRow.cpp
     src/ui/widgets/WashingMachineCard.cpp

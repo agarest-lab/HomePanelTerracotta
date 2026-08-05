@@ -4,17 +4,20 @@
 
 
 // Riga con 2 card: "Giorno" (soggiorno) e "Notte" (camera),
-// ciascuna con temperatura e umidità.
+// ciascuna con temperatura e umidità. Stile compatto, come
+// StatusCardsRow/WeatherCardsRow.
 class DayNightCardsRow
 {
 
 public:
 
+    // x/y: posizione della card "Giorno". "Notte" viene posizionata
+    // subito a destra (x + cardWidth + gap interno fisso).
     void create(
         lv_obj_t* parent,
         int x,
         int y,
-        int width,
+        int cardWidth,
         int height
     );
 

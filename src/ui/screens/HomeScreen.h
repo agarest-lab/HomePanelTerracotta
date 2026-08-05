@@ -9,6 +9,7 @@
 #include "../widgets/MotionLedsRow.h"
 #include "../widgets/CalendarCard.h"
 #include "../widgets/WashingMachineCard.h"
+#include "../widgets/WeatherIconCard.h"
 
 class HomeScreen
 {
@@ -33,6 +34,7 @@ private:
     StatusCardsRow statusRow;
     WeatherCardsRow weatherRow;
     DayNightCardsRow dayNightRow;
+    WeatherIconCard weatherIcon;
     CarStatusCard carStatusCard;
     MotionLedsRow motionLeds;
     CalendarCard calendarCard;

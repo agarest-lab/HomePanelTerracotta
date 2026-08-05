@@ -56,17 +56,17 @@ void CarStatusCard::create(
     socLabel = lv_label_create(card);
     lv_obj_set_style_text_color(socLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(socLabel, &lv_font_montserrat_32, 0);
-    lv_obj_align(socLabel, LV_ALIGN_TOP_MID, 0, 40);
+    lv_obj_align(socLabel, LV_ALIGN_TOP_MID, 0, 38);
 
     energyLabel = lv_label_create(card);
     lv_obj_set_style_text_color(energyLabel, lv_color_hex(0xA0A0A0), 0);
     lv_obj_set_style_text_font(energyLabel, &lv_font_montserrat_20, 0);
-    lv_obj_align(energyLabel, LV_ALIGN_TOP_MID, 0, 90);
+    lv_obj_align(energyLabel, LV_ALIGN_TOP_MID, 0, 82);
 
     dateLabel = lv_label_create(card);
     lv_obj_set_style_text_color(dateLabel, lv_color_hex(0xA0A0A0), 0);
     lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_20, 0);
-    lv_obj_align(dateLabel, LV_ALIGN_TOP_MID, 0, 120);
+    lv_obj_align(dateLabel, LV_ALIGN_TOP_MID, 0, 112);
 
 
     auto& repo = HomeAssistantRepository::instance();
