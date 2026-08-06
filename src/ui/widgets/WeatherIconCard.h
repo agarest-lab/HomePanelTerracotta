@@ -4,7 +4,24 @@
 #include <string>
 
 
-// Card con la sola icona (grande, colorata, animata) della condizione
+// Immagini icona (stile Cute Color / "Dusk" di icons8), convertite con
+// il tool https://lvgl.io/tools/imageconverter e compilate come file .c
+// nel progetto (vedi src/assets/weather_icons/).
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+LV_IMG_DECLARE(sun_icon);
+LV_IMG_DECLARE(clouds_icon);
+LV_IMG_DECLARE(rain_icon);
+LV_IMG_DECLARE(storm_icon);
+
+#ifdef __cplusplus
+}
+#endif
+
+
+// Card con la sola icona (grande, colorata, statica) della condizione
 // meteo corrente, senza testo. Legge weather.openweathermap.
 class WeatherIconCard
 {
@@ -35,6 +52,7 @@ private:
 
     lv_obj_t* card = nullptr;
     lv_obj_t* iconContainer = nullptr;
+    lv_obj_t* iconImage = nullptr;
 
     Category currentCategory = Category::None;
 
@@ -45,13 +63,5 @@ private:
     static Category categoryFromState(const std::string& state);
 
     void buildIcon(Category category);
-
-    void buildClearIcon();
-    void buildCloudyIcon();
-    void buildRainIcon();
-    void buildStormIcon();
-
-    // Helper per disegnare una nuvola semplice (usata da più categorie)
-    void addCloudShape(lv_color_t color);
 
 };

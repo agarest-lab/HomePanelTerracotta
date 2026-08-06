@@ -27,9 +27,9 @@ EnergyGaugesPanel::Gauge EnergyGaugesPanel::createGauge(
     lv_obj_set_size(gauge.card, size, size + 115);
     lv_obj_set_pos(gauge.card, x, y);
     // lv_obj_set_style_bg_color(gauge.card, lv_color_hex(0x1A1A1A), 0);
-    lv_obj_set_style_bg_color(gauge.card, lv_color_hex(0x821E50), 0);        // Colore iniziale
-    lv_obj_set_style_bg_grad_color(gauge.card, lv_color_hex(0x56082E), 0);  // Colore finale
-    lv_obj_set_style_bg_grad_dir(gauge.card, LV_GRAD_DIR_VER, 0);
+    lv_obj_set_style_bg_color(gauge.card, lv_color_hex(0x353535), 0);        // Colore iniziale
+    lv_obj_set_style_bg_grad_color(gauge.card, lv_color_hex(0x171717), 0);  // Colore finale
+    lv_obj_set_style_bg_grad_dir(gauge.card, LV_GRAD_DIR_RADIAL, 0);
     lv_obj_set_style_bg_opa(gauge.card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(gauge.card, 0, 0);
     lv_obj_set_style_radius(gauge.card, 16, 0);
@@ -38,8 +38,9 @@ EnergyGaugesPanel::Gauge EnergyGaugesPanel::createGauge(
 
     lv_obj_t* titleLabel = lv_label_create(gauge.card);
     lv_label_set_text(titleLabel, title);
-    lv_obj_set_style_text_color(titleLabel, lv_color_hex(0xD8D8D8), 0);
-    lv_obj_set_style_text_font(titleLabel, &lv_font_montserrat_28, 0);
+    // lv_obj_set_style_text_color(titleLabel, lv_color_hex(0xD8D8D8), 0);
+    lv_obj_set_style_text_color(titleLabel, color, 0);
+    lv_obj_set_style_text_font(titleLabel, &lv_font_montserrat_32, 0);
     lv_obj_align(titleLabel, LV_ALIGN_TOP_MID, 0, 0);
 
     int arcSize = size - 40;
@@ -60,7 +61,7 @@ EnergyGaugesPanel::Gauge EnergyGaugesPanel::createGauge(
     lv_obj_set_style_arc_width(gauge.arc, 16, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(gauge.arc, color, LV_PART_INDICATOR);
 
-    lv_obj_align(gauge.arc, LV_ALIGN_TOP_MID, 0, 34);
+    lv_obj_align(gauge.arc, LV_ALIGN_TOP_MID, 0, 38);
 
 
     gauge.valueLabel = lv_label_create(gauge.arc);

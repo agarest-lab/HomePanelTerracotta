@@ -40,9 +40,9 @@ void CarStatusCard::create(
     lv_obj_set_pos(card, x, y);
 
     // lv_obj_set_style_bg_color(card, lv_color_hex(0x1A1A1A), 0);  // Colore fisso originale
-    lv_obj_set_style_bg_color(card, lv_color_hex(0x2A2A2A), 0);        // Colore iniziale
-    lv_obj_set_style_bg_grad_color(card, lv_color_hex(0x454545), 0);  // Colore finale
-    lv_obj_set_style_bg_grad_dir(card, LV_GRAD_DIR_VER, 0);
+    lv_obj_set_style_bg_color(card, lv_color_hex(0x353535), 0);        // Colore iniziale
+    lv_obj_set_style_bg_grad_color(card, lv_color_hex(0x171717), 0);  // Colore finale
+    lv_obj_set_style_bg_grad_dir(card, LV_GRAD_DIR_RADIAL, 0);
     lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(card, 0, 0);
     lv_obj_set_style_radius(card, 16, 0);

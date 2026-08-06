@@ -13,7 +13,8 @@ lv_obj_t* DayNightCardsRow::createCardContainer(
     int y,
     int w,
     int h,
-    const char* title
+    const char* title,
+    lv_color_t titleColor
 )
 {
     lv_obj_t* card = lv_obj_create(parent);
@@ -21,10 +22,9 @@ lv_obj_t* DayNightCardsRow::createCardContainer(
     lv_obj_set_size(card, w, h);
     lv_obj_set_pos(card, x, y);
 
-    // lv_obj_set_style_bg_color(card, lv_color_hex(0x1A1A1A), 0);
-    lv_obj_set_style_bg_color(card, lv_color_hex(0x2983D5), 0);        // Colore iniziale
-    lv_obj_set_style_bg_grad_color(card, lv_color_hex(0x0F5DA4), 0);  // Colore finale
-    lv_obj_set_style_bg_grad_dir(card, LV_GRAD_DIR_VER, 0);
+    lv_obj_set_style_bg_color(card, lv_color_hex(0x353535), 0);
+    lv_obj_set_style_bg_grad_color(card, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(card, LV_GRAD_DIR_RADIAL, 0);
     lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(card, 0, 0);
     lv_obj_set_style_radius(card, 16, 0);
@@ -34,7 +34,7 @@ lv_obj_t* DayNightCardsRow::createCardContainer(
 
     lv_obj_t* titleLabel = lv_label_create(card);
     lv_label_set_text(titleLabel, title);
-    lv_obj_set_style_text_color(titleLabel, lv_color_hex(0xD8D8D8), 0);
+    lv_obj_set_style_text_color(titleLabel, titleColor, 0);   // <-- usa titleColor
     lv_obj_set_style_text_font(titleLabel, &lv_font_montserrat_32, 0);
     lv_obj_align(titleLabel, LV_ALIGN_TOP_MID, 0, 0);
 
@@ -50,7 +50,10 @@ void DayNightCardsRow::create(
     int height
 )
 {
-    dayCard = createCardContainer(parent, x, y, cardWidth, height, "Giorno");
+    dayCard = createCardContainer(
+        parent, x, y, cardWidth, height,
+        "Giorno", lv_color_hex(0xFFCA28)   // es. giallo per il giorno
+    );
 
     dayTempLabel = lv_label_create(dayCard);
     lv_obj_set_style_text_color(dayTempLabel, lv_color_white(), 0);
@@ -65,7 +68,10 @@ void DayNightCardsRow::create(
 
     int nightX = x + cardWidth + GAP;
 
-    nightCard = createCardContainer(parent, nightX, y, cardWidth, height, "Notte");
+    nightCard = createCardContainer(
+        parent, nightX, y, cardWidth, height,
+        "Notte", lv_color_hex(0x4FC3F7)    // es. azzurro per la notte
+    );
 
     nightTempLabel = lv_label_create(nightCard);
     lv_obj_set_style_text_color(nightTempLabel, lv_color_white(), 0);

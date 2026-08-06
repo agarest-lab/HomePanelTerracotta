@@ -1,26 +1,6 @@
 #include "WeatherIconCard.h"
 #include "../../services/HomeAssistantRepository.h"
 
-#include <algorithm>
-
-
-// --- Wrapper per animare proprietà di stile la cui firma non combacia
-// direttamente con lv_anim_exec_xcb_t ---
-
-static void animSetBgOpa(void* obj, int32_t value)
-{
-    lv_obj_set_style_bg_opa(static_cast<lv_obj_t*>(obj), (lv_opa_t)value, 0);
-}
-
-static void animSetTranslateX(void* obj, int32_t value)
-{
-    // translate_x si SOMMA alla posizione già calcolata (es. dal
-    // centraggio con lv_obj_center), non la sovrascrive — a differenza
-    // di lv_obj_set_x, che invece imposta una posizione assoluta e
-    // "rompe" qualsiasi allineamento automatico esistente.
-    lv_obj_set_style_translate_x(static_cast<lv_obj_t*>(obj), value, 0);
-}
-
 
 WeatherIconCard::Category WeatherIconCard::categoryFromState(const std::string& state)
 {
@@ -55,7 +35,9 @@ void WeatherIconCard::create(
     lv_obj_set_size(card, width, height);
     lv_obj_set_pos(card, x, y);
 
-    lv_obj_set_style_bg_color(card, lv_color_hex(0x1A1A1A), 0);
+    lv_obj_set_style_bg_color(card, lv_color_hex(0x353535), 0);
+    lv_obj_set_style_bg_grad_color(card, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(card, LV_GRAD_DIR_RADIAL, 0);
     lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(card, 0, 0);
     lv_obj_set_style_radius(card, 16, 0);
@@ -63,6 +45,7 @@ void WeatherIconCard::create(
 
     lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
+    // iconContainer resta solo per centrare/dimensionare l'immagine
     iconContainer = lv_obj_create(card);
 
     int iconSize = (width < height ? width : height) - 30;
@@ -76,10 +59,11 @@ void WeatherIconCard::create(
     lv_obj_clear_flag(iconContainer, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(iconContainer, LV_OBJ_FLAG_CLICKABLE);
 
+    iconImage = lv_img_create(iconContainer);
+    lv_obj_center(iconImage);
 
     auto& repo = HomeAssistantRepository::instance();
     repo.watch("weather.openweathermap");
-
 
     refresh();
 
@@ -87,169 +71,21 @@ void WeatherIconCard::create(
 }
 
 
-void WeatherIconCard::addCloudShape(lv_color_t color)
-{
-    int s = lv_obj_get_width(iconContainer);
-
-    lv_obj_t* body = lv_obj_create(iconContainer);
-    lv_obj_set_size(body, (int)(s * 0.8f), (int)(s * 0.38f));
-    lv_obj_align(body, LV_ALIGN_BOTTOM_MID, 0, -(int)(s * 0.08f));
-    lv_obj_set_style_bg_color(body, color, 0);
-    lv_obj_set_style_bg_opa(body, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_width(body, 0, 0);
-    lv_obj_set_style_radius(body, LV_RADIUS_CIRCLE, 0);
-    lv_obj_clear_flag(body, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_clear_flag(body, LV_OBJ_FLAG_CLICKABLE);
-
-    lv_obj_t* bump1 = lv_obj_create(iconContainer);
-    lv_obj_set_size(bump1, (int)(s * 0.42f), (int)(s * 0.42f));
-    lv_obj_align_to(bump1, body, LV_ALIGN_TOP_LEFT, (int)(s * 0.06f), (int)(s * 0.08f));
-    lv_obj_set_style_bg_color(bump1, color, 0);
-    lv_obj_set_style_bg_opa(bump1, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_width(bump1, 0, 0);
-    lv_obj_set_style_radius(bump1, LV_RADIUS_CIRCLE, 0);
-    lv_obj_clear_flag(bump1, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_clear_flag(bump1, LV_OBJ_FLAG_CLICKABLE);
-
-    lv_obj_t* bump2 = lv_obj_create(iconContainer);
-    lv_obj_set_size(bump2, (int)(s * 0.5f), (int)(s * 0.5f));
-    lv_obj_align_to(bump2, body, LV_ALIGN_TOP_RIGHT, -(int)(s * 0.1f), 0);
-    lv_obj_set_style_bg_color(bump2, color, 0);
-    lv_obj_set_style_bg_opa(bump2, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_width(bump2, 0, 0);
-    lv_obj_set_style_radius(bump2, LV_RADIUS_CIRCLE, 0);
-    lv_obj_clear_flag(bump2, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_clear_flag(bump2, LV_OBJ_FLAG_CLICKABLE);
-}
-
-
-void WeatherIconCard::buildClearIcon()
-{
-    int s = lv_obj_get_width(iconContainer);
-
-    lv_obj_t* sun = lv_obj_create(iconContainer);
-    int sunSize = (int)(s * 0.55f);
-    lv_obj_set_size(sun, sunSize, sunSize);
-    lv_obj_center(sun);
-    lv_obj_set_style_bg_color(sun, lv_color_hex(0xFFCA28), 0);
-    lv_obj_set_style_bg_opa(sun, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_width(sun, 0, 0);
-    lv_obj_set_style_radius(sun, LV_RADIUS_CIRCLE, 0);
-    lv_obj_clear_flag(sun, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_clear_flag(sun, LV_OBJ_FLAG_CLICKABLE);
-
-    lv_anim_t a;
-    lv_anim_init(&a);
-    lv_anim_set_var(&a, sun);
-    lv_anim_set_exec_cb(&a, animSetBgOpa);
-    lv_anim_set_values(&a, 150, 255);
-    lv_anim_set_time(&a, 1200);
-    lv_anim_set_playback_time(&a, 1200);
-    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-    lv_anim_start(&a);
-}
-
-
-void WeatherIconCard::buildCloudyIcon()
-{
-    addCloudShape(lv_color_hex(0xB0BEC5));
-
-    // Deriva orizzontale via translate_x (si somma al centraggio,
-    // non lo sovrascrive — a differenza di lv_obj_set_x).
-    lv_anim_t a;
-    lv_anim_init(&a);
-    lv_anim_set_var(&a, iconContainer);
-    lv_anim_set_exec_cb(&a, animSetTranslateX);
-    lv_anim_set_values(&a, -8, 8);
-    lv_anim_set_time(&a, 2200);
-    lv_anim_set_playback_time(&a, 2200);
-    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-    lv_anim_start(&a);
-}
-
-
-void WeatherIconCard::buildRainIcon()
-{
-    addCloudShape(lv_color_hex(0x78909C));
-
-    int s = lv_obj_get_width(iconContainer);
-    int dropSize = (int)(s * 0.09f);
-    if(dropSize < 4) dropSize = 4;
-
-    int startY = (int)(s * 0.55f);
-    int endY = s - dropSize;
-
-    for(int i = 0; i < 3; i++)
-    {
-        lv_obj_t* drop = lv_obj_create(iconContainer);
-        lv_obj_set_size(drop, dropSize, dropSize * 2);
-        lv_obj_set_style_bg_color(drop, lv_color_hex(0x4FC3F7), 0);
-        lv_obj_set_style_bg_opa(drop, LV_OPA_COVER, 0);
-        lv_obj_set_style_border_width(drop, 0, 0);
-        lv_obj_set_style_radius(drop, LV_RADIUS_CIRCLE, 0);
-        lv_obj_clear_flag(drop, LV_OBJ_FLAG_SCROLLABLE);
-        lv_obj_clear_flag(drop, LV_OBJ_FLAG_CLICKABLE);
-
-        int dropX = (int)(s * (0.28f + i * 0.22f));
-        lv_obj_set_pos(drop, dropX, startY);
-
-        lv_anim_t a;
-        lv_anim_init(&a);
-        lv_anim_set_var(&a, drop);
-        lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_y);
-        lv_anim_set_values(&a, startY, endY);
-        lv_anim_set_time(&a, 700);
-        lv_anim_set_delay(&a, i * 220);
-        lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-        lv_anim_set_repeat_delay(&a, 200);
-        lv_anim_start(&a);
-    }
-}
-
-
-void WeatherIconCard::buildStormIcon()
-{
-    addCloudShape(lv_color_hex(0x546E7A));
-
-    int s = lv_obj_get_width(iconContainer);
-
-    lv_obj_t* bolt = lv_obj_create(iconContainer);
-    int boltW = (int)(s * 0.14f);
-    int boltH = (int)(s * 0.42f);
-    lv_obj_set_size(bolt, boltW, boltH);
-    lv_obj_align(bolt, LV_ALIGN_BOTTOM_MID, 0, -(int)(s * 0.05f));
-    lv_obj_set_style_bg_color(bolt, lv_color_hex(0xFFEB3B), 0);
-    lv_obj_set_style_bg_opa(bolt, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_width(bolt, 0, 0);
-    lv_obj_set_style_radius(bolt, 3, 0);
-    lv_obj_clear_flag(bolt, LV_OBJ_FLAG_SCROLLABLE);
-    lv_obj_clear_flag(bolt, LV_OBJ_FLAG_CLICKABLE);
-
-    lv_anim_t a;
-    lv_anim_init(&a);
-    lv_anim_set_var(&a, bolt);
-    lv_anim_set_exec_cb(&a, animSetBgOpa);
-    lv_anim_set_values(&a, 60, 255);
-    lv_anim_set_time(&a, 120);
-    lv_anim_set_playback_time(&a, 120);
-    lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
-    lv_anim_set_repeat_delay(&a, 900);
-    lv_anim_start(&a);
-}
-
-
 void WeatherIconCard::buildIcon(Category category)
 {
-    lv_obj_clean(iconContainer);
-
     switch(category)
     {
-        case Category::Clear:  buildClearIcon();  break;
-        case Category::Cloudy: buildCloudyIcon(); break;
-        case Category::Rain:   buildRainIcon();   break;
-        case Category::Storm:  buildStormIcon();  break;
+        case Category::Clear:  lv_img_set_src(iconImage, &sun_icon);    break;
+        case Category::Cloudy: lv_img_set_src(iconImage, &clouds_icon); break;
+        case Category::Rain:   lv_img_set_src(iconImage, &rain_icon);   break;
+        case Category::Storm:  lv_img_set_src(iconImage, &storm_icon);  break;
         default: break;
     }
+
+    // Se la sorgente PNG ha una dimensione diversa da iconContainer,
+    // la scaliamo per riempirlo mantenendo le proporzioni
+    lv_img_set_zoom(iconImage, 256 * lv_obj_get_width(iconContainer) / sun_icon.header.w);
+    lv_img_set_antialias(iconImage, true);
 }
 
 

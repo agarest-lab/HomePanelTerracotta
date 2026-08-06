@@ -37,7 +37,7 @@ private:
     lv_timer_t* updateTimer = nullptr;
 
     static void timerCallback(lv_timer_t* timer);
-
+    /*
     lv_obj_t* createCardContainer(
         lv_obj_t* parent,
         int x,
@@ -46,5 +46,14 @@ private:
         int h,
         const char* title
     );
-
+    */
+    static lv_obj_t* createCardContainer(
+        lv_obj_t* parent,
+        int x,
+        int y,
+        int w,
+        int h,
+        const char* title,
+        lv_color_t titleColor
+    );
 };
