@@ -29,7 +29,10 @@ void CalendarCard::create(
     lv_obj_set_size(card, width, height);
     lv_obj_set_pos(card, x, y);
 
-    lv_obj_set_style_bg_color(card, lv_color_hex(0x1A1A1A), 0);
+    // lv_obj_set_style_bg_color(card, lv_color_hex(0x1A1A1A), 0);
+    lv_obj_set_style_bg_color(card, lv_color_hex(0x511231), 0);        // Colore iniziale
+    lv_obj_set_style_bg_grad_color(card, lv_color_hex(0x513543), 0);  // Colore finale
+    lv_obj_set_style_bg_grad_dir(card, LV_GRAD_DIR_HOR, 0);
     lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(card, 0, 0);
     lv_obj_set_style_radius(card, 16, 0);

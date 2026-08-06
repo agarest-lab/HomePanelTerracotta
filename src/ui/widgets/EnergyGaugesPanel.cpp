@@ -26,7 +26,10 @@ EnergyGaugesPanel::Gauge EnergyGaugesPanel::createGauge(
     gauge.card = lv_obj_create(parent);
     lv_obj_set_size(gauge.card, size, size + 115);
     lv_obj_set_pos(gauge.card, x, y);
-    lv_obj_set_style_bg_color(gauge.card, lv_color_hex(0x1A1A1A), 0);
+    // lv_obj_set_style_bg_color(gauge.card, lv_color_hex(0x1A1A1A), 0);
+    lv_obj_set_style_bg_color(gauge.card, lv_color_hex(0x821E50), 0);        // Colore iniziale
+    lv_obj_set_style_bg_grad_color(gauge.card, lv_color_hex(0x56082E), 0);  // Colore finale
+    lv_obj_set_style_bg_grad_dir(gauge.card, LV_GRAD_DIR_VER, 0);
     lv_obj_set_style_bg_opa(gauge.card, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(gauge.card, 0, 0);
     lv_obj_set_style_radius(gauge.card, 16, 0);

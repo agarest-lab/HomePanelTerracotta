@@ -4,12 +4,21 @@
 #include <algorithm>
 
 
-// --- Wrapper per animare l'opacità (la firma di lv_obj_set_style_bg_opa
-// non combacia direttamente con lv_anim_exec_xcb_t, serve un adattatore) ---
+// --- Wrapper per animare proprietà di stile la cui firma non combacia
+// direttamente con lv_anim_exec_xcb_t ---
 
 static void animSetBgOpa(void* obj, int32_t value)
 {
     lv_obj_set_style_bg_opa(static_cast<lv_obj_t*>(obj), (lv_opa_t)value, 0);
+}
+
+static void animSetTranslateX(void* obj, int32_t value)
+{
+    // translate_x si SOMMA alla posizione già calcolata (es. dal
+    // centraggio con lv_obj_center), non la sovrascrive — a differenza
+    // di lv_obj_set_x, che invece imposta una posizione assoluta e
+    // "rompe" qualsiasi allineamento automatico esistente.
+    lv_obj_set_style_translate_x(static_cast<lv_obj_t*>(obj), value, 0);
 }
 
 
@@ -29,7 +38,7 @@ WeatherIconCard::Category WeatherIconCard::categoryFromState(const std::string& 
     if(state == "lightning" || state == "lightning-rainy" || state == "exceptional")
         return Category::Storm;
 
-    return Category::Cloudy;   // fallback ragionevole
+    return Category::Cloudy;
 }
 
 
@@ -82,7 +91,6 @@ void WeatherIconCard::addCloudShape(lv_color_t color)
 {
     int s = lv_obj_get_width(iconContainer);
 
-    // Corpo della nuvola: rettangolo arrotondato largo, non troppo alto
     lv_obj_t* body = lv_obj_create(iconContainer);
     lv_obj_set_size(body, (int)(s * 0.8f), (int)(s * 0.38f));
     lv_obj_align(body, LV_ALIGN_BOTTOM_MID, 0, -(int)(s * 0.08f));
@@ -93,7 +101,6 @@ void WeatherIconCard::addCloudShape(lv_color_t color)
     lv_obj_clear_flag(body, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(body, LV_OBJ_FLAG_CLICKABLE);
 
-    // Due "gobbe" della nuvola (cerchi) sopra il corpo
     lv_obj_t* bump1 = lv_obj_create(iconContainer);
     lv_obj_set_size(bump1, (int)(s * 0.42f), (int)(s * 0.42f));
     lv_obj_align_to(bump1, body, LV_ALIGN_TOP_LEFT, (int)(s * 0.06f), (int)(s * 0.08f));
@@ -131,7 +138,6 @@ void WeatherIconCard::buildClearIcon()
     lv_obj_clear_flag(sun, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(sun, LV_OBJ_FLAG_CLICKABLE);
 
-    // Animazione "respiro": l'opacità oscilla dolcemente
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, sun);
@@ -148,12 +154,13 @@ void WeatherIconCard::buildCloudyIcon()
 {
     addCloudShape(lv_color_hex(0xB0BEC5));
 
-    // Leggera deriva orizzontale della nuvola
+    // Deriva orizzontale via translate_x (si somma al centraggio,
+    // non lo sovrascrive — a differenza di lv_obj_set_x).
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, iconContainer);
-    lv_anim_set_exec_cb(&a, (lv_anim_exec_xcb_t)lv_obj_set_x);
-    lv_anim_set_values(&a, lv_obj_get_x(iconContainer) - 8, lv_obj_get_x(iconContainer) + 8);
+    lv_anim_set_exec_cb(&a, animSetTranslateX);
+    lv_anim_set_values(&a, -8, 8);
     lv_anim_set_time(&a, 2200);
     lv_anim_set_playback_time(&a, 2200);
     lv_anim_set_repeat_count(&a, LV_ANIM_REPEAT_INFINITE);
@@ -218,7 +225,6 @@ void WeatherIconCard::buildStormIcon()
     lv_obj_clear_flag(bolt, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_clear_flag(bolt, LV_OBJ_FLAG_CLICKABLE);
 
-    // Lampeggio: opacità che scatta tra trasparente e piena
     lv_anim_t a;
     lv_anim_init(&a);
     lv_anim_set_var(&a, bolt);
@@ -254,9 +260,6 @@ void WeatherIconCard::refresh()
     std::string state = repo.getState("weather.openweathermap");
     Category category = categoryFromState(state);
 
-    // Ricostruisce l'icona (e riavvia l'animazione) SOLO se la
-    // categoria è cambiata, per non "spezzare" l'animazione ogni
-    // pochi secondi durante il refresh periodico.
     if(category != currentCategory)
     {
         currentCategory = category;

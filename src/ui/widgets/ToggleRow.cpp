@@ -19,7 +19,10 @@ void ToggleRow::create(
         lv_obj_t* container = lv_obj_create(parent);
         lv_obj_set_size(container, TOGGLE_WIDTH, 120); //90
         lv_obj_set_pos(container, x + (int)i * (TOGGLE_WIDTH + TOGGLE_GAP), y);
-        lv_obj_set_style_bg_color(container, lv_color_hex(0x1A1A1A), 0);
+        // lv_obj_set_style_bg_color(container, lv_color_hex(0x1A1A1A), 0);
+        lv_obj_set_style_bg_color(container, lv_color_hex(0x2E5C1A), 0);        // Colore iniziale
+        lv_obj_set_style_bg_grad_color(container, lv_color_hex(0x183E07), 0);  // Colore finale
+        lv_obj_set_style_bg_grad_dir(container, LV_GRAD_DIR_CONICAL, 0);
         lv_obj_set_style_bg_opa(container, LV_OPA_COVER, 0);
         lv_obj_set_style_border_width(container, 0, 0);
         lv_obj_set_style_radius(container, 12, 0);
