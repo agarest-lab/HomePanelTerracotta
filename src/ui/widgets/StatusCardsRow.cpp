@@ -76,7 +76,6 @@ void StatusCardsRow::create(
     // Spostato più in basso per lasciare spazio alle 2 righe del titolo
     condensaValueLabel = createValueLabel(condensaCard, 0, 84, lv_color_hex(0xFF7043));
 
-
     // --- Card 2: ACS -------------------------------------------------------
 
     acsCard = createCardContainer(parent, x + (cardWidth + gap), y, cardWidth, height);
@@ -121,6 +120,7 @@ void StatusCardsRow::create(
     auto& repo = HomeAssistantRepository::instance();
 
     repo.watch("sensor.ur_limite_anticondensa");
+    repo.watch("sensor.shellyem_c45bbee1d2cb_channel_2_power");
     repo.watch("sensor.acs_pdc");
     repo.watch("sensor.acs_casa");
     repo.watch("sensor.mandata_pdc");
@@ -137,9 +137,7 @@ void StatusCardsRow::create(
 void StatusCardsRow::refresh()
 {
     auto& repo = HomeAssistantRepository::instance();
-
     char buf[64];
-
 
     // --- Limite condensa ---
 
@@ -147,6 +145,16 @@ void StatusCardsRow::refresh()
     std::snprintf(buf, sizeof(buf), "%.1f °C", condensa);
     lv_label_set_text(condensaValueLabel, buf);
 
+    float pumpPower = repo.getFloatState("sensor.shellyem_c45bbee1d2cb_channel_2_power");
+
+    if(pumpPower > 150.0f)
+    {
+        lv_obj_set_style_bg_color(condensaCard, lv_color_hex(0x5E1B1B), 0);   // rosso, come acsCard
+    }
+    else
+    {
+        lv_obj_set_style_bg_color(condensaCard, lv_color_hex(0x1B5E20), 0);   // verde, come acsCard
+    }    
 
     // --- ACS ---
 

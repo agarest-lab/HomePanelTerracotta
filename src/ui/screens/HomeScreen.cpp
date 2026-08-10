@@ -23,6 +23,14 @@ void HomeScreen::create()
         true   // <-- layout verticale
     );
 
+    weatherIcon.create(
+        lv_screen_active(),
+        0,
+        1340,
+        230,
+        150
+    );
+
     // Gauge energia: sostituisce EnergyCard, subito sotto clock/camera
     // (che restano creati altrove, es. in UI::init(), come nel branch precedente)
     energyGauges.create(
@@ -68,14 +76,6 @@ void HomeScreen::create()
         0,
         1170,
         1080,
-        150
-    );
-
-    weatherIcon.create(
-        lv_screen_active(),
-        0,
-        1340,
-        230,
         150
     );
 
