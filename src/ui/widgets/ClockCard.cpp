@@ -1,5 +1,6 @@
 #include "ClockCard.h"
 #include "../../assets/montserrat_orario_140.h"
+#include "../../services/HomeAssistantRepository.h"
 
 #include <ctime>
 #include <cstdio>
@@ -38,12 +39,18 @@ void ClockCard::create(
     lv_obj_set_style_text_font(timeLabel, &montserrat_orario_140, 0);
     lv_obj_align(timeLabel, LV_ALIGN_TOP_MID, 0, 50);
 
-
     dateLabel = lv_label_create(card);
     lv_obj_set_style_text_color(dateLabel, lv_color_white(), 0);
     lv_obj_set_style_text_font(dateLabel, &lv_font_montserrat_32, 0);
-    lv_obj_align(dateLabel, LV_ALIGN_BOTTOM_MID, 0, -30);
+    lv_obj_align(dateLabel, LV_ALIGN_BOTTOM_MID, 0, -70);
 
+    extLabel = lv_label_create(card);
+    lv_obj_set_style_text_color(extLabel, lv_color_white(), 0);
+    lv_obj_set_style_text_font(extLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(extLabel, LV_ALIGN_BOTTOM_MID, 0, -30);
+
+    auto& repo = HomeAssistantRepository::instance();
+    repo.watch("sensor.temp_ingresso");
 
     update();
 
@@ -66,6 +73,14 @@ void ClockCard::update()
     );
 
     lv_label_set_text(timeLabel, timeBuf);
+
+
+    auto& repo = HomeAssistantRepository::instance();
+    float extTemp = repo.getFloatState("sensor.temp_ingresso");
+
+    char extBuf[48];
+    std::snprintf(extBuf, sizeof(extBuf), "T misurata: %.1f °C", extTemp);
+    lv_label_set_text(extLabel, extBuf);
 
 
     char dateBuf[64];

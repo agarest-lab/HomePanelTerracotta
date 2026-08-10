@@ -334,7 +334,7 @@ void EnergyGaugesPanel::refresh()
     }
 
     setGaugeValue(
-        gridGauge, (int)std::fabs(gridPower), 6000,
+        gridGauge, (int)std::fabs(gridPower), 5000,
         valueBuf, subBuf,
         gridArcColor, gridSubColor
     );

@@ -23,7 +23,7 @@ private:
 
     lv_obj_t* timeLabel = nullptr;
     lv_obj_t* dateLabel = nullptr;
-
+    lv_obj_t* extLabel = nullptr;
     lv_timer_t* updateTimer = nullptr;
 
     static void timerCallback(lv_timer_t* timer);
