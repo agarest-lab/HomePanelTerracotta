@@ -42,7 +42,7 @@ void CalendarCard::create(
 
 
     lv_obj_t* title = lv_label_create(card);
-    lv_label_set_text(title, "Impegni");
+    lv_label_set_text(title, "Calendario");
     lv_obj_set_style_text_color(title, lv_color_hex(0xD8D8D8), 0);
     lv_obj_set_style_text_font(title, &lv_font_montserrat_36, 0);
     lv_obj_set_pos(title, 0, 0);
@@ -119,7 +119,7 @@ void CalendarCard::refresh()
         lv_label_set_text(summaryLabel, ev.summary.c_str());
         lv_obj_set_style_text_color(summaryLabel, lv_color_white(), 0);
         lv_obj_set_style_text_font(summaryLabel, &lv_font_montserrat_24, 0);
-        lv_obj_set_pos(summaryLabel, 270, 0);
+        lv_obj_set_pos(summaryLabel, 290, 0);
 
         count++;
     }

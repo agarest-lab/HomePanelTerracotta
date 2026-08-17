@@ -14,6 +14,7 @@ set(LV_BUILD_DEMOS OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/lvgl)
 
 # SDL
+set(SDL_PULSEAUDIO OFF CACHE BOOL "" FORCE)
 add_subdirectory(external/SDL)
 
 # HomePanel

@@ -88,14 +88,13 @@ void WeatherCardsRow::create(
 
     alertCard = createCardContainer(parent, x + (cardWidth + gap), y, cardWidth, height);
 
-    alertTitleLabel = lv_label_create(alertCard);
-    lv_obj_set_style_text_color(alertTitleLabel, lv_color_white(), 0);
-    lv_obj_set_style_text_font(alertTitleLabel, &lv_font_montserrat_32, 0);
-    lv_obj_set_width(alertTitleLabel, cardWidth - 20);
-    lv_label_set_long_mode(alertTitleLabel, LV_LABEL_LONG_WRAP);
-    lv_obj_set_style_text_align(alertTitleLabel, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_align(alertTitleLabel, LV_ALIGN_TOP_MID, 0, 0);
+    lv_obj_t* alertHeaderLabel = lv_label_create(alertCard);
+    lv_label_set_text(alertHeaderLabel, "ALLERTA:");
+    lv_obj_set_style_text_color(alertHeaderLabel, lv_color_hex(0xD8D8D8), 0);
+    lv_obj_set_style_text_font(alertHeaderLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(alertHeaderLabel, LV_ALIGN_TOP_MID, 0, 0);
 
+    alertTitleLabel  = createValueLabel(alertCard, 44, lv_color_white());
     alertStatusLabel = createValueLabel(alertCard, 88, lv_color_hex(0xE0E0E0));
 
 
@@ -174,12 +173,16 @@ void WeatherCardsRow::refresh()
     else if(temp < 32)  meteoColor = lv_color_hex(0xFF8C00);
     else                meteoColor = lv_color_hex(0xFF3C00);
 
+    //  lv_obj_set_style_bg_color(meteoCard, meteoColor, 0);
+    //  lv_obj_set_style_bg_opa(meteoCard, LV_OPA_30, 0);
     lv_obj_set_style_bg_color(meteoCard, meteoColor, 0);
-    lv_obj_set_style_bg_opa(meteoCard, LV_OPA_30, 0);
+    lv_obj_set_style_bg_grad_color(meteoCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(meteoCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(meteoCard, LV_OPA_COVER, 0);
 
 
     // --- Allerta meteo ---------------------------------------------------
-    
+
     std::string alarmState = repo.getState("binary_sensor.meteoalarm_friuli_venezia_giulia");
     std::string awarenessRaw = repo.getAttribute("binary_sensor.meteoalarm_friuli_venezia_giulia", "awareness_level");
     std::string eventRaw = repo.getAttribute("binary_sensor.meteoalarm_friuli_venezia_giulia", "event");
@@ -215,11 +218,10 @@ void WeatherCardsRow::refresh()
         else if(!eventRaw.empty())                               eventLabel = eventRaw;
     }
 
-    // Riga 1 + Riga 2: "ALLERTA:" fisso + tipo (o NESSUNA)
-    std::string titleText = "ALLERTA:\n" + eventLabel;
-    lv_label_set_text(alertTitleLabel, titleText.c_str());
+    // Riga 2: tipo di allerta (o NESSUNA)
+    lv_label_set_text(alertTitleLabel, eventLabel.c_str());
 
-    // Riga 3: scadenza (vuota se non c'è allerta)
+    // Riga 3: scadenza
     if(noAlert || expiresRaw.empty())
     {
         lv_label_set_text(alertStatusLabel, "Non presente");
@@ -244,9 +246,12 @@ void WeatherCardsRow::refresh()
     else
         alertColor = lv_color_hex(0x6E2C00);
 
+    // lv_obj_set_style_bg_color(alertCard, alertColor, 0);
+    // lv_obj_set_style_bg_opa(alertCard, LV_OPA_40, 0);
     lv_obj_set_style_bg_color(alertCard, alertColor, 0);
-    lv_obj_set_style_bg_opa(alertCard, LV_OPA_40, 0);
-
+    lv_obj_set_style_bg_grad_color(alertCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(alertCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(alertCard, LV_OPA_COVER, 0);    
 
     // --- Qualità aria ------------------------------------------------------
 
@@ -294,8 +299,12 @@ void WeatherCardsRow::refresh()
     else if(aqi <= 300)  aqiColor = lv_color_hex(0x9B59B6);
     else                 aqiColor = lv_color_hex(0x6E2C00);
 
+    // lv_obj_set_style_bg_color(aqiCard, aqiColor, 0);
+    // lv_obj_set_style_bg_opa(aqiCard, LV_OPA_40, 0);
     lv_obj_set_style_bg_color(aqiCard, aqiColor, 0);
-    lv_obj_set_style_bg_opa(aqiCard, LV_OPA_40, 0);
+    lv_obj_set_style_bg_grad_color(aqiCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(aqiCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(aqiCard, LV_OPA_COVER, 0);    
 
 
     // --- Stazione ---------------------------------------------------------
@@ -331,8 +340,14 @@ void WeatherCardsRow::refresh()
 
     // Stessa scala colori dell'AQI, riusando il valore della stazione
     // peggiore (sensor.aqi_peggiore) come nel dashboard originale
+    // lv_obj_set_style_bg_color(stationCard, aqiColor, 0);
+    // lv_obj_set_style_bg_opa(stationCard, LV_OPA_20, 0);
+    // Stessa scala colori dell'AQI, riusando il valore della stazione
+    // peggiore (sensor.aqi_peggiore) come nel dashboard originale
     lv_obj_set_style_bg_color(stationCard, aqiColor, 0);
-    lv_obj_set_style_bg_opa(stationCard, LV_OPA_20, 0);
+    lv_obj_set_style_bg_grad_color(stationCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(stationCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(stationCard, LV_OPA_COVER, 0);
 }
 
 

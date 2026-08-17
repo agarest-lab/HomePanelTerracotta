@@ -154,7 +154,11 @@ void StatusCardsRow::refresh()
     else
     {
         lv_obj_set_style_bg_color(condensaCard, lv_color_hex(0x1B5E20), 0);   // verde, come acsCard
-    }    
+    }
+
+    lv_obj_set_style_bg_grad_color(condensaCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(condensaCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(condensaCard, LV_OPA_COVER, 0);
 
     // --- ACS ---
 
@@ -176,6 +180,9 @@ void StatusCardsRow::refresh()
         lv_obj_set_style_bg_color(acsCard, lv_color_hex(0x5E1B1B), 0);
     }
 
+    lv_obj_set_style_bg_grad_color(acsCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(acsCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(acsCard, LV_OPA_COVER, 0);
 
     // --- Impianto ---
 
@@ -187,6 +194,11 @@ void StatusCardsRow::refresh()
 
     std::snprintf(buf, sizeof(buf), "%.1f °C casa", ritorno);
     lv_label_set_text(ritornoLabel, buf);
+
+    lv_obj_set_style_bg_color(impiantoCard, lv_color_hex(0x1A1A1A), 0);
+    lv_obj_set_style_bg_grad_color(impiantoCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(impiantoCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(impiantoCard, LV_OPA_COVER, 0);
 
 
     // --- Allarme ---
@@ -213,6 +225,10 @@ void StatusCardsRow::refresh()
         lv_label_set_text(alarmLabel, "Allarme:\n\nSCONOSCIUTO");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x1A1A1A), 0);
     }
+
+    lv_obj_set_style_bg_grad_color(alarmCard, lv_color_hex(0x171717), 0);
+    lv_obj_set_style_bg_grad_dir(alarmCard, LV_GRAD_DIR_RADIAL, 0);
+    lv_obj_set_style_bg_opa(alarmCard, LV_OPA_COVER, 0);
 }
 
 
