@@ -1,3 +1,4 @@
 /build/
 /.vscode/settings.json
-src/config/secrets.hbuild/
+src/config/secrets.h
+build/
