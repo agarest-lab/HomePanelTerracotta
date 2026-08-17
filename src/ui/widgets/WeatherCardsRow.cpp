@@ -179,9 +179,8 @@ void WeatherCardsRow::refresh()
 
 
     // --- Allerta meteo ---------------------------------------------------
-
+    
     std::string alarmState = repo.getState("binary_sensor.meteoalarm_friuli_venezia_giulia");
-
     std::string awarenessRaw = repo.getAttribute("binary_sensor.meteoalarm_friuli_venezia_giulia", "awareness_level");
     std::string eventRaw = repo.getAttribute("binary_sensor.meteoalarm_friuli_venezia_giulia", "event");
     std::string expiresRaw = repo.getAttribute("binary_sensor.meteoalarm_friuli_venezia_giulia", "expires");
@@ -195,21 +194,33 @@ void WeatherCardsRow::refresh()
     // trim spazi
     level.erase(std::remove(level.begin(), level.end(), ' '), level.end());
 
+    bool noAlert = (alarmState == "off" || level == "0" || level.empty());
 
     std::string eventLower = eventRaw;
     std::transform(eventLower.begin(), eventLower.end(), eventLower.begin(), ::tolower);
 
-    std::string eventLabel = "Allerta";
-    if(eventLower.find("rain") != std::string::npos)        eventLabel = "Pioggia";
-    else if(eventLower.find("storm") != std::string::npos)  eventLabel = "Temporali";
-    else if(eventLower.find("wind") != std::string::npos)   eventLabel = "Vento";
-    else if(eventLower.find("snow") != std::string::npos)   eventLabel = "Neve";
-    else if(eventLower.find("temperature") != std::string::npos) eventLabel = "Temperatura";
-    else if(!eventRaw.empty())                               eventLabel = eventRaw;
+    std::string eventLabel;
+    if(noAlert)
+    {
+        eventLabel = "NESSUNA";
+    }
+    else
+    {
+        eventLabel = "Allerta";
+        if(eventLower.find("rain") != std::string::npos)        eventLabel = "Pioggia";
+        else if(eventLower.find("storm") != std::string::npos)  eventLabel = "Temporali";
+        else if(eventLower.find("wind") != std::string::npos)   eventLabel = "Vento";
+        else if(eventLower.find("snow") != std::string::npos)   eventLabel = "Neve";
+        else if(eventLower.find("temperature") != std::string::npos) eventLabel = "Temperatura";
+        else if(!eventRaw.empty())                               eventLabel = eventRaw;
+    }
 
-    lv_label_set_text(alertTitleLabel, eventLabel.c_str());
+    // Riga 1 + Riga 2: "ALLERTA:" fisso + tipo (o NESSUNA)
+    std::string titleText = "ALLERTA:\n" + eventLabel;
+    lv_label_set_text(alertTitleLabel, titleText.c_str());
 
-    if(expiresRaw.empty())
+    // Riga 3: scadenza (vuota se non c'è allerta)
+    if(noAlert || expiresRaw.empty())
     {
         lv_label_set_text(alertStatusLabel, "Non presente");
     }
@@ -222,7 +233,7 @@ void WeatherCardsRow::refresh()
 
     lv_color_t alertColor;
 
-    if(alarmState == "off" || level == "0" || level.empty())
+    if(noAlert)
         alertColor = lv_color_hex(0x008000);
     else if(level == "2")
         alertColor = lv_color_hex(0xF1C40F);

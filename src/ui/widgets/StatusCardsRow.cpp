@@ -195,22 +195,22 @@ void StatusCardsRow::refresh()
 
     if(alarmState == "armed_night")
     {
-        lv_label_set_text(alarmLabel, "Allarme:\n\nnotte");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nNOTTE");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x7A4A00), 0);
     }
     else if(alarmState == "armed_away")
     {
-        lv_label_set_text(alarmLabel, "Allarme:\n\nfuori casa");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nCOMPLETO");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x5E1B1B), 0);
     }
     else if(alarmState == "disarmed")
     {
-        lv_label_set_text(alarmLabel, "Allarme:\n\ndisinserito");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nDISINSERITO");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x1B5E20), 0);
     }
     else
     {
-        lv_label_set_text(alarmLabel, "Allarme:\n\nsconosciuto");
+        lv_label_set_text(alarmLabel, "Allarme:\n\nSCONOSCIUTO");
         lv_obj_set_style_bg_color(alarmCard, lv_color_hex(0x1A1A1A), 0);
     }
 }
