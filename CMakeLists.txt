@@ -33,10 +33,15 @@ add_executable(HomePanel
     src/services/CameraFeed.cpp
     src/assets/montserrat_orario_140.c
     src/assets/montserrat_orario_140.c
-    src/assets/weather_icons/sun_icon.c
-    src/assets/weather_icons/clouds_icon.c
-    src/assets/weather_icons/rain_icon.c
-    src/assets/weather_icons/storm_icon.c
+    src/assets/weather_icons/sun_96.c
+    src/assets/weather_icons/moon_96.c
+    src/assets/weather_icons/rain_96.c
+    src/assets/weather_icons/storm_96.c
+    src/assets/weather_icons/sun_96.c
+    src/assets/weather_icons/wind_96.c
+    src/assets/weather_icons/moon_cloud_96.c
+    src/assets/weather_icons/snow_96.c
+    src/assets/weather_icons/sun_cloud_96.c
     src/ui/widgets/WeatherCardsRow.cpp
     src/services/CalendarFeed.cpp
     src/ui/widgets/CalendarCard.cpp

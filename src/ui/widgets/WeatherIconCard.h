@@ -11,10 +11,14 @@
 extern "C" {
 #endif
 
-LV_IMG_DECLARE(sun_icon);
-LV_IMG_DECLARE(clouds_icon);
-LV_IMG_DECLARE(rain_icon);
-LV_IMG_DECLARE(storm_icon);
+LV_IMG_DECLARE(sun_96);
+LV_IMG_DECLARE(moon_96);
+LV_IMG_DECLARE(sun_cloud_96);
+LV_IMG_DECLARE(moon_cloud_96);
+LV_IMG_DECLARE(rain_96);
+LV_IMG_DECLARE(snow_96);
+LV_IMG_DECLARE(wind_96);
+LV_IMG_DECLARE(storm_96);
 
 #ifdef __cplusplus
 }
@@ -22,7 +26,8 @@ LV_IMG_DECLARE(storm_icon);
 
 
 // Card con la sola icona (grande, colorata, statica) della condizione
-// meteo corrente, senza testo. Legge weather.openweathermap.
+// meteo corrente, senza testo. Legge weather.openweathermap e sun.sun
+// per determinare rispettivamente condizione e ciclo giorno/notte.
 class WeatherIconCard
 {
 
@@ -47,7 +52,9 @@ private:
         Clear,
         Cloudy,
         Rain,
-        Storm
+        Storm,
+        Wind,
+        Snow
     };
 
     lv_obj_t* card = nullptr;
@@ -55,6 +62,7 @@ private:
     lv_obj_t* iconImage = nullptr;
 
     Category currentCategory = Category::None;
+    bool currentIsNight = false;
 
     lv_timer_t* updateTimer = nullptr;
 
@@ -62,6 +70,8 @@ private:
 
     static Category categoryFromState(const std::string& state);
 
-    void buildIcon(Category category);
+    static bool isNightTime();
+
+    void buildIcon(Category category, bool night);
 
 };

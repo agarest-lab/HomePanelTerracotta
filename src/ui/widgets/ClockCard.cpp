@@ -79,7 +79,7 @@ void ClockCard::update()
     float extTemp = repo.getFloatState("sensor.temp_ingresso");
 
     char extBuf[48];
-    std::snprintf(extBuf, sizeof(extBuf), "T misurata: %.1f °C", extTemp);
+    std::snprintf(extBuf, sizeof(extBuf), "T ingresso: %.1f °C", extTemp);
     lv_label_set_text(extLabel, extBuf);
 
 

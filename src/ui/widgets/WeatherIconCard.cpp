@@ -7,18 +7,40 @@ WeatherIconCard::Category WeatherIconCard::categoryFromState(const std::string& 
     if(state == "sunny" || state == "clear-night")
         return Category::Clear;
 
-    if(state == "cloudy" || state == "partlycloudy" ||
-       state == "fog" || state == "windy" || state == "windy-variant")
+    if(state == "cloudy" || state == "partlycloudy" || state == "fog")
         return Category::Cloudy;
 
-    if(state == "rainy" || state == "pouring" || state == "snowy" ||
-       state == "snowy-rainy" || state == "hail")
+    if(state == "windy" || state == "windy-variant")
+        return Category::Wind;
+
+    if(state == "rainy" || state == "pouring" || state == "hail" || state == "snowy-rainy")
         return Category::Rain;
+
+    if(state == "snowy")
+        return Category::Snow;
 
     if(state == "lightning" || state == "lightning-rainy" || state == "exceptional")
         return Category::Storm;
 
     return Category::Cloudy;
+}
+
+
+bool WeatherIconCard::isNightTime()
+{
+    auto& repo = HomeAssistantRepository::instance();
+
+    // sun.sun ha stato "below_horizon" di notte, "above_horizon" di giorno
+    std::string sunState = repo.getState("sun.sun");
+    if(sunState == "below_horizon")
+        return true;
+
+    // fallback: se lo stato meteo stesso indica la notte
+    std::string weatherState = repo.getState("weather.openweathermap");
+    if(weatherState == "clear-night")
+        return true;
+
+    return false;
 }
 
 
@@ -64,6 +86,7 @@ void WeatherIconCard::create(
 
     auto& repo = HomeAssistantRepository::instance();
     repo.watch("weather.openweathermap");
+    repo.watch("sun.sun");
 
     refresh();
 
@@ -71,20 +94,44 @@ void WeatherIconCard::create(
 }
 
 
-void WeatherIconCard::buildIcon(Category category)
+void WeatherIconCard::buildIcon(Category category, bool night)
 {
+    const lv_img_dsc_t* icon = &sun_96;
+
     switch(category)
     {
-        case Category::Clear:  lv_img_set_src(iconImage, &sun_icon);    break;
-        case Category::Cloudy: lv_img_set_src(iconImage, &clouds_icon); break;
-        case Category::Rain:   lv_img_set_src(iconImage, &rain_icon);   break;
-        case Category::Storm:  lv_img_set_src(iconImage, &storm_icon);  break;
-        default: break;
+        case Category::Clear:
+            icon = night ? &moon_96 : &sun_96;
+            break;
+
+        case Category::Cloudy:
+            icon = night ? &moon_cloud_96 : &sun_cloud_96;
+            break;
+
+        case Category::Wind:
+            icon = &wind_96;
+            break;
+
+        case Category::Rain:
+            icon = &rain_96;
+            break;
+
+        case Category::Snow:
+            icon = &snow_96;
+            break;
+
+        case Category::Storm:
+            icon = &storm_96;
+            break;
+
+        default:
+            break;
     }
 
-    // Se la sorgente PNG ha una dimensione diversa da iconContainer,
-    // la scaliamo per riempirlo mantenendo le proporzioni
-    lv_img_set_zoom(iconImage, 256 * lv_obj_get_width(iconContainer) / sun_icon.header.w);
+    lv_img_set_src(iconImage, icon);
+
+    // Scala l'icona (96x96) per riempire iconContainer mantenendo le proporzioni
+    lv_img_set_zoom(iconImage, 256 * lv_obj_get_width(iconContainer) / icon->header.w);
     lv_img_set_antialias(iconImage, true);
 }
 
@@ -95,11 +142,13 @@ void WeatherIconCard::refresh()
 
     std::string state = repo.getState("weather.openweathermap");
     Category category = categoryFromState(state);
+    bool night = isNightTime();
 
-    if(category != currentCategory)
+    if(category != currentCategory || night != currentIsNight)
     {
         currentCategory = category;
-        buildIcon(category);
+        currentIsNight = night;
+        buildIcon(category, night);
     }
 }
 

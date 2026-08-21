@@ -29,6 +29,7 @@ private:
 
     lv_obj_t* meteoCard = nullptr;
     lv_obj_t* meteoTempLabel = nullptr;
+    lv_obj_t* meteoHumidityLabel = nullptr; 
     lv_obj_t* meteoCondLabel = nullptr;
 
     lv_obj_t* alertCard = nullptr;

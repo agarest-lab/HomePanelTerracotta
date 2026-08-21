@@ -74,14 +74,9 @@ void WeatherCardsRow::create(
 
     meteoCard = createCardContainer(parent, x, y, cardWidth, height);
 
-    lv_obj_t* meteoTitle = lv_label_create(meteoCard);
-    lv_label_set_text(meteoTitle, "Meteo");
-    lv_obj_set_style_text_color(meteoTitle, lv_color_hex(0xD8D8D8), 0);
-    lv_obj_set_style_text_font(meteoTitle, &lv_font_montserrat_32, 0);
-    lv_obj_align(meteoTitle, LV_ALIGN_TOP_MID, 0, 0);
-
-    meteoTempLabel = createValueLabel(meteoCard, 44, lv_color_white());
-    meteoCondLabel = createValueLabel(meteoCard, 88, lv_color_hex(0xC0C0C0));
+    meteoTempLabel = createValueLabel(meteoCard, 0, lv_color_white());
+    meteoHumidityLabel = createValueLabel(meteoCard, 44, lv_color_white());
+    meteoCondLabel = createValueLabel(meteoCard, 88, lv_color_white());
 
 
     // --- Card 2: Allerta meteo --------------------------------------------
@@ -104,12 +99,12 @@ void WeatherCardsRow::create(
 
     lv_obj_t* aqiTitle = lv_label_create(aqiCard);
     lv_label_set_text(aqiTitle, "Air Quality");
-    lv_obj_set_style_text_color(aqiTitle, lv_color_hex(0xD8D8D8), 0);
+    lv_obj_set_style_text_color(aqiTitle, lv_color_white(), 0);
     lv_obj_set_style_text_font(aqiTitle, &lv_font_montserrat_32, 0);
     lv_obj_align(aqiTitle, LV_ALIGN_TOP_MID, 0, 0);
 
     aqiValueLabel = createValueLabel(aqiCard, 44, lv_color_white());
-    aqiPollutantLabel = createValueLabel(aqiCard, 88, lv_color_hex(0xC0C0C0));
+    aqiPollutantLabel = createValueLabel(aqiCard, 88, lv_color_white());
 
 
     // --- Card 4: Stazione ---------------------------------------------------
@@ -118,18 +113,19 @@ void WeatherCardsRow::create(
 
     lv_obj_t* stationTitle = lv_label_create(stationCard);
     lv_label_set_text(stationTitle, "Stazione");
-    lv_obj_set_style_text_color(stationTitle, lv_color_hex(0xD8D8D8), 0);
+    lv_obj_set_style_text_color(stationTitle, lv_color_white(), 0);
     lv_obj_set_style_text_font(stationTitle, &lv_font_montserrat_32, 0);
     lv_obj_align(stationTitle, LV_ALIGN_TOP_MID, 0, 0);
 
     stationNameLabel = createValueLabel(stationCard, 44, lv_color_white());
-    stationPm25Label = createValueLabel(stationCard, 88, lv_color_hex(0xC0C0C0));
+    stationPm25Label = createValueLabel(stationCard, 88, lv_color_white());
 
 
     // Registra le entità presso il repository
     auto& repo = HomeAssistantRepository::instance();
 
     repo.watch("sensor.openweathermap_temperature");
+    repo.watch("sensor.openweathermap_humidity");
     repo.watch("sensor.openweathermap_weather");
 
     repo.watch("binary_sensor.meteoalarm_friuli_venezia_giulia");
@@ -154,14 +150,17 @@ void WeatherCardsRow::refresh()
 
     char buf[64];
 
-
     // --- Meteo ---------------------------------------------------------
 
     float temp = repo.getFloatState("sensor.openweathermap_temperature");
+    float humidity = repo.getFloatState("sensor.openweathermap_humidity");
     std::string weather = repo.getState("sensor.openweathermap_weather");
 
     std::snprintf(buf, sizeof(buf), "%.1f °C", temp);
     lv_label_set_text(meteoTempLabel, buf);
+
+    std::snprintf(buf, sizeof(buf), "RH %.0f%%", humidity);
+    lv_label_set_text(meteoHumidityLabel, buf);
     lv_label_set_text(meteoCondLabel, weather.empty() ? "--" : weather.c_str());
 
     lv_color_t meteoColor;
