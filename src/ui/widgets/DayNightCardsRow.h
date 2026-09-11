@@ -18,6 +18,7 @@ public:
         int x,
         int y,
         int cardWidth,
+        int bathCardWidth,
         int height
     );
 
@@ -33,6 +34,10 @@ private:
     lv_obj_t* nightCard = nullptr;
     lv_obj_t* nightTempLabel = nullptr;
     lv_obj_t* nightHumLabel = nullptr;
+
+    lv_obj_t* bathCard      = nullptr;
+    lv_obj_t* bathTempLabel = nullptr;
+    lv_obj_t* bathHumLabel  = nullptr;
 
     lv_timer_t* updateTimer = nullptr;
 

@@ -47,12 +47,13 @@ void DayNightCardsRow::create(
     int x,
     int y,
     int cardWidth,
+    int bathCardWidth,
     int height
 )
 {
     dayCard = createCardContainer(
         parent, x, y, cardWidth, height,
-        "Giorno", lv_color_hex(0xFFCA28)   // es. giallo per il giorno
+        "Giorno", lv_color_hex(0xFFCA28)
     );
 
     dayTempLabel = lv_label_create(dayCard);
@@ -70,7 +71,7 @@ void DayNightCardsRow::create(
 
     nightCard = createCardContainer(
         parent, nightX, y, cardWidth, height,
-        "Notte", lv_color_hex(0x4FC3F7)    // es. azzurro per la notte
+        "Notte", lv_color_hex(0x4FC3F7)
     );
 
     nightTempLabel = lv_label_create(nightCard);
@@ -84,12 +85,32 @@ void DayNightCardsRow::create(
     lv_obj_align(nightHumLabel, LV_ALIGN_TOP_MID, 0, 88);
 
 
+    int bathX = nightX + cardWidth + GAP;
+
+    bathCard = createCardContainer(
+        parent, bathX, y, bathCardWidth, height,
+        "Bagno", lv_color_hex(0x81C784)   // verde per il bagno
+    );
+
+    bathTempLabel = lv_label_create(bathCard);
+    lv_obj_set_style_text_color(bathTempLabel, lv_color_white(), 0);
+    lv_obj_set_style_text_font(bathTempLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(bathTempLabel, LV_ALIGN_TOP_MID, 0, 44);
+
+    bathHumLabel = lv_label_create(bathCard);
+    lv_obj_set_style_text_color(bathHumLabel, lv_color_hex(0xA0A0A0), 0);
+    lv_obj_set_style_text_font(bathHumLabel, &lv_font_montserrat_32, 0);
+    lv_obj_align(bathHumLabel, LV_ALIGN_TOP_MID, 0, 88);
+
+
     auto& repo = HomeAssistantRepository::instance();
 
     repo.watch("sensor.soggiorno_soggiorno_temperatura_soggiorno");
     repo.watch("sensor.soggiorno_soggiorno_umidita_soggiorno");
     repo.watch("sensor.camera_temperatura_camera");
     repo.watch("sensor.camera_umidita_camera");
+    repo.watch("sensor.sonoff_temperatura_bagno_notte");
+    repo.watch("sensor.sonoff_umidita_bagno_notte");
 
 
     refresh();
@@ -122,8 +143,17 @@ void DayNightCardsRow::refresh()
 
     std::snprintf(buf, sizeof(buf), "%.1f %%", nightHum);
     lv_label_set_text(nightHumLabel, buf);
-}
 
+
+    float bathTemp = repo.getFloatState("sensor.sonoff_temperatura_bagno_notte");
+    float bathHum  = repo.getFloatState("sensor.sonoff_umidita_bagno_notte");
+
+    std::snprintf(buf, sizeof(buf), "%.1f °C", bathTemp);
+    lv_label_set_text(bathTempLabel, buf);
+
+    std::snprintf(buf, sizeof(buf), "%.1f %%", bathHum);
+    lv_label_set_text(bathHumLabel, buf);
+}
 
 void DayNightCardsRow::timerCallback(lv_timer_t* timer)
 {

@@ -83,15 +83,16 @@ void HomeScreen::create()
         lv_screen_active(),
         248,     // 227 + 12 di gap
         1340,
-        227,     // larghezza di CIASCUNA delle due card (Giorno e Notte)
+        227,     // larghezza di CIASCUNA delle card Giorno e Notte
+        155,     // larghezza della card Bagno (spazio liberato da SoC)
         150
     );
 
     carStatusCard.create(
         lv_screen_active(),
-        730,
+        905,     // spostata per restare ancorata a destra (905+175=1080)
         1340,
-        350,
+        175,     // larghezza dimezzata
         150
     );
 
