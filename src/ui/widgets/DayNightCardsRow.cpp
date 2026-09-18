@@ -107,10 +107,10 @@ void DayNightCardsRow::create(
 
     repo.watch("sensor.soggiorno_soggiorno_temperatura_soggiorno");
     repo.watch("sensor.soggiorno_soggiorno_umidita_soggiorno");
-    repo.watch("sensor.camera_temperatura_camera");
-    repo.watch("sensor.camera_umidita_camera");
-    repo.watch("sensor.sonoff_temperatura_bagno_notte");
-    repo.watch("sensor.sonoff_umidita_bagno_notte");
+    repo.watch("sensor.zigbee_notte_temperature");
+    repo.watch("sensor.zigbee_notte_humidity");
+    repo.watch("sensor.zigbee_notte_temperature");
+    repo.watch("sensor.zigbee_notte_humidity");
 
 
     refresh();
@@ -135,8 +135,8 @@ void DayNightCardsRow::refresh()
     lv_label_set_text(dayHumLabel, buf);
 
 
-    float nightTemp = repo.getFloatState("sensor.camera_temperatura_camera");
-    float nightHum  = repo.getFloatState("sensor.camera_umidita_camera");
+    float nightTemp = repo.getFloatState("sensor.zigbee_notte_temperature");
+    float nightHum  = repo.getFloatState("sensor.zigbee_notte_humidity");
 
     std::snprintf(buf, sizeof(buf), "%.1f °C", nightTemp);
     lv_label_set_text(nightTempLabel, buf);
@@ -145,8 +145,8 @@ void DayNightCardsRow::refresh()
     lv_label_set_text(nightHumLabel, buf);
 
 
-    float bathTemp = repo.getFloatState("sensor.sonoff_temperatura_bagno_notte");
-    float bathHum  = repo.getFloatState("sensor.sonoff_umidita_bagno_notte");
+    float bathTemp = repo.getFloatState("sensor.zigbee_notte_temperature");
+    float bathHum  = repo.getFloatState("sensor.zigbee_notte_humidity");
 
     std::snprintf(buf, sizeof(buf), "%.1f °C", bathTemp);
     lv_label_set_text(bathTempLabel, buf);
