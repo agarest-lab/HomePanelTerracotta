@@ -2,6 +2,7 @@
 #include "../../services/CalendarFeed.h"
 
 #include <cstdio>
+#include <ctime>
 
 
 lv_color_t CalendarCard::colorForCalendar(const std::string& entityId)
@@ -13,6 +14,23 @@ lv_color_t CalendarCard::colorForCalendar(const std::string& entityId)
         return lv_color_hex(0xFF7043);
 
     return lv_color_white();
+}
+
+
+// Confronta i primi 10 caratteri di startIso ("YYYY-MM-DD") con la
+// data odierna, per capire se l'evento cade oggi.
+static bool isToday(const CalendarEvent& ev)
+{
+    if(ev.startIso.size() < 10)
+        return false;
+
+    std::time_t now = std::time(nullptr);
+    std::tm nowTm = *std::localtime(&now);
+
+    char todayBuf[11];
+    std::strftime(todayBuf, sizeof(todayBuf), "%Y-%m-%d", &nowTm);
+
+    return ev.startIso.compare(0, 10, todayBuf) == 0;
 }
 
 
@@ -101,13 +119,26 @@ void CalendarCard::refresh()
         lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
 
         char dateTimeBuf[64];
-        std::snprintf(
-            dateTimeBuf,
-            sizeof(dateTimeBuf),
-            "%s  %s",
-            ev.displayDate.c_str(),
-            ev.displayTime.c_str()
-        );
+
+        if(isToday(ev))
+        {
+            std::snprintf(
+                dateTimeBuf,
+                sizeof(dateTimeBuf),
+                "OGGI  %s",
+                ev.displayTime.c_str()
+            );
+        }
+        else
+        {
+            std::snprintf(
+                dateTimeBuf,
+                sizeof(dateTimeBuf),
+                "%s  %s",
+                ev.displayDate.c_str(),
+                ev.displayTime.c_str()
+            );
+        }
 
         lv_obj_t* dateLabel = lv_label_create(row);
         lv_label_set_text(dateLabel, dateTimeBuf);
