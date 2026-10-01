@@ -24,6 +24,7 @@ void CameraCard::create(
     lv_obj_set_style_border_width(card, 0, 0);
     lv_obj_set_style_pad_all(card, 0, 0);
     lv_obj_set_style_radius(card, 12, 0);
+    lv_obj_set_style_clip_corner(card, true, 0);
 
     lv_obj_remove_flag(card, LV_OBJ_FLAG_SCROLLABLE);
 
@@ -65,14 +66,15 @@ void CameraCard::refresh()
 
     lv_img_set_src(image, &imgDsc);
 
-    // Scala l'immagine per adattarla alla larghezza del riquadro,
-    // mantenendo le proporzioni originali della telecamera.
-    float scale = static_cast<float>(boxWidth) / static_cast<float>(currentFrame->width);
-    int zoom = static_cast<int>(scale * 256.0f);
+    // Scala in modalita "cover": riempie tutto il riquadro e centra il ritaglio
+    float sx = static_cast<float>(boxWidth)  / static_cast<float>(currentFrame->width);
+    float sy = static_cast<float>(boxHeight) / static_cast<float>(currentFrame->height);
+    float scale = sx > sy ? sx : sy;
 
-    lv_img_set_zoom(image, zoom);
-
-    lv_obj_set_pos(image, 0, 0);
+    lv_img_set_zoom(image, static_cast<int>(scale * 256.0f));
+    lv_obj_set_pos(image,
+        static_cast<int>((boxWidth  - currentFrame->width  * scale) / 2),
+        static_cast<int>((boxHeight - currentFrame->height * scale) / 2));
 }
 
 

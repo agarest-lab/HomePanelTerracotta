@@ -27,6 +27,25 @@ add_executable(HomePanel
     src/ui/screens/HomeScreen.cpp
     src/ui/widgets/ClockCard.cpp
     src/ui/widgets/CameraCard.cpp
+    src/ui/widgets/PanelWidgets.cpp
+    src/assets/fonts/ui_clock_112.c
+    src/assets/fonts/ui_icons_24.c
+    src/assets/fonts/ui_icons_40.c
+    src/assets/fonts/ui_icons_72.c
+    src/assets/fonts/ui_sans_18.c
+    src/assets/fonts/ui_sans_20.c
+    src/assets/fonts/ui_sans_22.c
+    src/assets/fonts/ui_sans_24.c
+    src/assets/fonts/ui_sans_26.c
+    src/assets/fonts/ui_sans_28.c
+    src/assets/fonts/ui_sansb_22.c
+    src/assets/fonts/ui_sansb_24.c
+    src/assets/fonts/ui_sansb_28.c
+    src/assets/fonts/ui_serif_36.c
+    src/assets/fonts/ui_serif_40.c
+    src/assets/fonts/ui_serif_44.c
+    src/assets/fonts/ui_serif_52.c
+    src/assets/fonts/ui_serif_60.c
     src/ui/widgets/StatusCardsRow.cpp
     src/services/HomeAssistantClient.cpp
     src/services/HomeAssistantRepository.cpp

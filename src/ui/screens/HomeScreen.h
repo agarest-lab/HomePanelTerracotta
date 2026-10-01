@@ -1,43 +1,47 @@
 #pragma once
 
-#include "../widgets/EnergyGaugesPanel.h"
-#include "../widgets/ToggleRow.h"
-#include "../widgets/StatusCardsRow.h"
-#include "../widgets/WeatherCardsRow.h"
-#include "../widgets/DayNightCardsRow.h"
-#include "../widgets/CarStatusCard.h"
-#include "../widgets/MotionLedsRow.h"
-#include "../widgets/CalendarCard.h"
-#include "../widgets/WashingMachineCard.h"
-#include "../widgets/WeatherIconCard.h"
+#include "../widgets/PanelWidgets.h"
 
+// Layout verticale 1080x1920 (altezze in pixel, ultima riga flessibile):
+//
+//  [ allerta meteo                          ]  80
+//  [ orologio / data            meteo       ] 130
+//  [ Casa        | Fotovoltaico             ] 170
+//  [ Batteria    | Rete                     ] 170
+//  [ Telecamera | Luci principali           ] 300
+//  [ Clima e impianti (3 tessere)           ] 190
+//  [ Stato sistema | Temperature interne    ] 200
+//  [ Meteo | Qualita' aria | Stazione       ] 130
+//  [ Impegni                                ] resto
 class HomeScreen
 {
 
 public:
 
     void create();
-    void updateData();
 
 
 private:
 
-    static void timerCallback(
-        lv_timer_t* timer
-    );
+    AlertBanner alert;
+    ClockBar clockBar;
 
-    lv_timer_t* updateTimer = nullptr;
+    EnergyTile houseTile;
+    EnergyTile pvTile;
+    EnergyTile batteryTile;
+    EnergyTile gridTile;
 
-    EnergyGaugesPanel energyGauges;
-    ToggleRow lightsRow;
-    ToggleRow socketsRow;
-    StatusCardsRow statusRow;
-    WeatherCardsRow weatherRow;
-    DayNightCardsRow dayNightRow;
-    WeatherIconCard weatherIcon;
-    CarStatusCard carStatusCard;
-    MotionLedsRow motionLeds;
-    CalendarCard calendarCard;
-    WashingMachineCard washingMachine;
+    CameraPanel cameraPanel;
+    LightsPanel lightsPanel;
+
+    ClimatePanel climatePanel;
+    SystemPanel systemPanel;
+    RoomsPanel roomsPanel;
+
+    WeatherTile weatherTile;
+    AirTile airTile;
+    StationTile stationTile;
+
+    AgendaPanel agendaPanel;
 
 };
