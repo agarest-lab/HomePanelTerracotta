@@ -7,14 +7,16 @@
 namespace Theme
 {
     // Superfici
-    constexpr uint32_t BG = 0xEFE7DA, CARD = 0xFBF7EE, CARD_LINE = 0xD9CFBE, LINE = 0xE6DDCB;
-    constexpr uint32_t INK = 0x2A2723, MUTED = 0x7A7164, SUB_LIGHT = 0x6A6256, SUB_DARK = 0xF4EFE6;
+    constexpr uint32_t BG = 0x1A1714, CARD = 0x26221D, CARD_LINE = 0x38322A, LINE = 0x38322A;
+    constexpr uint32_t TEXT = 0xF0E9DD, MUTED = 0xA89F90;                      // testo su sfondo/card scuri
+    constexpr uint32_t INK = 0x2A2723, SUB_LIGHT = 0x6A6256, SUB_DARK = 0xF4EFE6; // testo su tessere chiare / scure
     constexpr uint32_t WHITE = 0xFFFFFF;
 
     // Colori delle tessere
-    constexpr uint32_t SAND = 0xE4DAC8, SAND_D = 0xCFC4AF;
+    constexpr uint32_t SAND = 0x3A342C, SAND_D = 0xCFC4AF;
     constexpr uint32_t TEAL = 0x2E6E6B, OLIVE = 0x5E7A35, BRICK = 0xB8442A, RED = 0xA8412F;
-    constexpr uint32_t ORANGE = 0xD9702B, TERRA = 0xC4502D, MUSTARD = 0xE0A526, MUSTARD_L = 0xF2D9A0;
+    constexpr uint32_t ORANGE = 0xD9702B, TERRA = 0xC4502D, MUSTARD = 0xE0A526, MUSTARD_D = 0x8C6A1F;
+    constexpr uint32_t TEAL_T = 0x5FB0AB, TERRA_T = 0xE8795A;                // varianti chiare per il testo su fondo scuro
     constexpr uint32_t NIGHT = 0x34505C, CAM = 0x2A2723, LIVE_DOT = 0x8FD16A;
 
     inline lv_color_t c(uint32_t hex) { return lv_color_hex(hex); }
@@ -72,7 +74,7 @@ namespace Theme
         return o;
     }
 
-    inline lv_obj_t* label(lv_obj_t* parent, const char* text, const lv_font_t* font, uint32_t color = INK)
+    inline lv_obj_t* label(lv_obj_t* parent, const char* text, const lv_font_t* font, uint32_t color = TEXT)
     {
         lv_obj_t* l = lv_label_create(parent);
         lv_label_set_text(l, text);

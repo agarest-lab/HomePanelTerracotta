@@ -138,9 +138,9 @@ namespace
 
     uint32_t calendarColor(const std::string& id)
     {
-        if(id == "calendar.omar_rossoni_gmail_com") return TEAL;
-        if(id == "calendar.sendina")                return TERRA;
-        return INK;
+        if(id == "calendar.omar_rossoni_gmail_com") return TEAL_T;
+        if(id == "calendar.sendina")                return TERRA_T;
+        return TEXT;
     }
 
     // Intestazione di una card: icona + titolo
@@ -150,8 +150,8 @@ namespace
         lv_obj_set_flex_align(r, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
         lv_obj_set_style_pad_column(r, 10, 0);
         lv_obj_set_style_pad_bottom(r, bottom, 0);
-        label(r, icon, I24, INK);
-        label(r, title, B24, INK);
+        label(r, icon, I24, TEXT);
+        label(r, title, B24, TEXT);
         return r;
     }
 
@@ -436,7 +436,7 @@ void EnergyTile::refresh()
         setf(subL, "INV %.0f °C", t);
         setf(subR, "Oggi %.1f kWh", day);
         if(w > 20) apply(pct(w, 6000), true, MUSTARD);      // produce
-        else       apply(0, true, SAND);                    // a riposo
+        else       apply(0, false, SAND);                    // a riposo
         break;
     }
     case Kind::Battery:
@@ -471,7 +471,7 @@ void EnergyTile::refresh()
 
         if(w > 10)       { lv_label_set_text(titleL, "Rete · in immissione"); apply(pct(std::fabs(w), 5000), false, OLIVE);  }
         else if(w < -10) { lv_label_set_text(titleL, "Rete · in prelievo");   apply(pct(std::fabs(w), 5000), false, ORANGE); }
-        else             { lv_label_set_text(titleL, "Rete · in equilibrio"); apply(0, true, SAND); }
+        else             { lv_label_set_text(titleL, "Rete · in equilibrio"); apply(0, false, SAND); }
         break;
     }
     }
@@ -559,8 +559,8 @@ void LightsPanel::create(lv_obj_t* cell)
     lv_obj_t* hl = box(head, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(hl, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_style_pad_column(hl, 10, 0);
-    label(hl, Ico::BULB, I24, INK);
-    label(hl, "Luci principali", B24, INK);
+    label(hl, Ico::BULB, I24, TEXT);
+    label(hl, "Luci principali", B24, TEXT);
     countL = label(head, "", S22, MUTED);
 
     lv_obj_t* g = lv_obj_create(cd);
@@ -672,7 +672,7 @@ void ClimatePanel::refresh()
     float ritorno = repo().getFloatState("sensor.ritorno_casa");
     setf(impianto.value, "%.1f °C", mandata);
     setf(impianto.sub, "%.1f °C casa", ritorno);
-    paintM(impianto, Tone{ SAND, true });
+    paintM(impianto, Tone{ SAND, false });
 }
 
 
@@ -707,7 +707,7 @@ void SystemPanel::create(lv_obj_t* cell)
 void SystemPanel::refresh()
 {
     std::string s = repo().getState("alarm_control_panel.80_000_zone_1_alarm");
-    Tone t{ SAND, true };
+    Tone t{ SAND, false };
     const char* mode = "Sconosciuto";
     const char* state = "";
 
@@ -724,7 +724,7 @@ void SystemPanel::refresh()
     setf(car.value, "SOC %d%%", (int)soc);
     setf(car.sub, "%.0f kWh\n%s", energy,
          fmtDateTime(repo().getState("sensor.ultima_sessione_timestamp")).c_str());
-    paintM(car, Tone{ SAND, true });
+    paintM(car, Tone{ SAND, false });
 }
 
 
@@ -744,7 +744,7 @@ void RoomsPanel::create(lv_obj_t* cell)
 
     struct Def { const char* icon; const char* title; Tone tone; lv_obj_t** t; lv_obj_t** h; };
     Def defs[2] = {
-        { Ico::SUN,  "Giorno", { MUSTARD_L, true },  &dayT,   &dayH   },
+        { Ico::SUN,  "Giorno", { MUSTARD_D, false },  &dayT,   &dayH   },
         { Ico::MOON, "Notte",  { NIGHT,     false }, &nightT, &nightH },
     };
 
@@ -808,8 +808,8 @@ namespace
 
 void WeatherTile::create(lv_obj_t* cell)
 {
-    buildInfoTile(cell, obj, icon, title, value, sub, Ico::CLOUD, "Tempertura ingresso", R44);
-    repo().watch("sensor.temp_ingresso");
+    buildInfoTile(cell, obj, icon, title, value, sub, Ico::CLOUD, "Meteo locale", R44);
+    repo().watch("sensor.openweathermap_temperature");
     repo().watch("sensor.openweathermap_weather");
     repo().watch("sensor.openweathermap_humidity");
     refresh();
@@ -818,7 +818,7 @@ void WeatherTile::create(lv_obj_t* cell)
 
 void WeatherTile::refresh()
 {
-    float temp = repo().getFloatState("sensor.temp_ingresso");
+    float temp = repo().getFloatState("sensor.openweathermap_temperature");
     setf(value, "%.1f °C", temp);
     std::string cond = repo().getState("sensor.openweathermap_weather");
     setf(sub, "%s · umidità %.0f%%", cond.empty() ? "--" : cond.c_str(),
@@ -923,7 +923,7 @@ void AgendaPanel::refresh()
         lv_obj_set_width(d, 96);
         lv_obj_t* t = label(r, ev.displayTime.c_str(), S24, MUTED);
         lv_obj_set_width(t, 210);
-        lv_obj_t* s = label(r, ev.summary.c_str(), S26, INK);
+        lv_obj_t* s = label(r, ev.summary.c_str(), S26, TEXT);
         lv_label_set_long_mode(s, LV_LABEL_LONG_DOT);
         lv_obj_set_height(s, lv_font_get_line_height(S26));
         lv_obj_set_flex_grow(s, 1);
