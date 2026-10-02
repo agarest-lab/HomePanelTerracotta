@@ -71,9 +71,12 @@ namespace
         lv_img_set_antialias(img, true);
     }
 
+    // Slot per l'icona meteo: l'immagine e' mostrata a dimensione nativa (96 px)
+    // dentro uno slot piu' grande, cosi' non viene mai ritagliata.
     lv_obj_t* iconSlot(lv_obj_t* parent, int size)
     {
         lv_obj_t* slot = box(parent, LV_FLEX_FLOW_ROW, size, size);
+        lv_obj_set_style_clip_corner(slot, false, 0);
         lv_obj_t* img = lv_img_create(slot);
         lv_obj_center(img);
         return img;
@@ -294,7 +297,7 @@ void ClockBar::create(lv_obj_t* cell)
     lv_obj_t* r = box(row, LV_FLEX_FLOW_ROW);
     lv_obj_set_flex_align(r, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
     lv_obj_set_style_pad_column(r, 14, 0);
-    icon = iconSlot(r, 72);
+    icon = iconSlot(r, 104);
     lv_obj_t* rt = box(r, LV_FLEX_FLOW_COLUMN);
     tempL = label(rt, "-- °C", R60);
     condL = label(rt, "", S24, MUTED);
@@ -321,7 +324,7 @@ void ClockBar::refresh()
     lv_label_set_text(condL, cond.empty() ? "--" : cond.c_str());
 
     const lv_img_dsc_t* d = weatherIcon();
-    if(d != shownIcon) { shownIcon = d; showIcon(icon, d, 72); }
+    if(d != shownIcon) { shownIcon = d; showIcon(icon, d, 96); }
 }
 
 
@@ -808,8 +811,8 @@ namespace
 
 void WeatherTile::create(lv_obj_t* cell)
 {
-    buildInfoTile(cell, obj, icon, title, value, sub, Ico::CLOUD, "Meteo locale", R44);
-    repo().watch("sensor.openweathermap_temperature");
+    buildInfoTile(cell, obj, icon, title, value, sub, Ico::CLOUD, "Temperatura ingresso", R44);
+    repo().watch("sensor.temp_ingresso");
     repo().watch("sensor.openweathermap_weather");
     repo().watch("sensor.openweathermap_humidity");
     refresh();
@@ -818,7 +821,7 @@ void WeatherTile::create(lv_obj_t* cell)
 
 void WeatherTile::refresh()
 {
-    float temp = repo().getFloatState("sensor.openweathermap_temperature");
+    float temp = repo().getFloatState("sensor.temp_ingresso");
     setf(value, "%.1f °C", temp);
     std::string cond = repo().getState("sensor.openweathermap_weather");
     setf(sub, "%s · umidità %.0f%%", cond.empty() ? "--" : cond.c_str(),
