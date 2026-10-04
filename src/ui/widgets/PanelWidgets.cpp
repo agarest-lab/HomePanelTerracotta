@@ -612,10 +612,10 @@ void LightsPanel::refresh()
         bool isOn = repo().getBoolState(kLights[ch.index].entity);
         on += isOn ? 1 : 0;
 
-        lv_obj_set_style_bg_color(ch.obj, c(isOn ? MUSTARD : BG), 0);
-        lv_obj_set_style_border_color(ch.obj, c(isOn ? MUSTARD : CARD_LINE), 0);
-        lv_obj_set_style_text_color(ch.icon, c(isOn ? INK : MUTED), 0);
-        lv_obj_set_style_text_color(ch.name, c(isOn ? INK : MUTED), 0);
+        lv_obj_set_style_bg_color(ch.obj, c(isOn ? OLIVE : BG), 0);
+        lv_obj_set_style_border_color(ch.obj, c(isOn ? OLIVE : CARD_LINE), 0);
+        lv_obj_set_style_text_color(ch.icon, c(isOn ? WHITE : MUTED), 0);
+        lv_obj_set_style_text_color(ch.name, c(isOn ? WHITE : MUTED), 0);
     }
 
     setf(countL, "%d/%d accese", on, COUNT);

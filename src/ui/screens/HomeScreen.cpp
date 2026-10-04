@@ -46,7 +46,7 @@ void HomeScreen::create()
     static const int32_t camCols[] = { LV_GRID_FR(5), LV_GRID_FR(7), LV_GRID_TEMPLATE_LAST };
     static const int32_t triCols[] = { LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
 
-    static const int32_t rootRows[]   = { 80, 130, 364, 312, 198, 210, 138, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+    static const int32_t rootRows[]   = { 130, 80, 364, 312, 198, 210, 138, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
     static const int32_t energyRows[] = { 178, 178, LV_GRID_TEMPLATE_LAST };
     static const int32_t oneRow[]     = { LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
 
@@ -54,8 +54,8 @@ void HomeScreen::create()
     lv_obj_t* root = gridIn(screen, oneCol, rootRows, GAP);
     lv_obj_set_style_pad_all(root, 36, 0);
 
-    lv_obj_t* alertCell  = cellOf(root, 0, 1, 0, 1);
-    lv_obj_t* clockCell  = cellOf(root, 0, 1, 1, 1);
+    lv_obj_t* clockCell  = cellOf(root, 0, 1, 0, 1);
+    lv_obj_t* alertCell  = cellOf(root, 0, 1, 1, 1);
 
     lv_obj_t* energyGrid = gridIn(cellOf(root, 0, 1, 2, 1), twoCols, energyRows, GAP);
     lv_obj_t* houseCell   = cellOf(energyGrid, 0, 1, 0, 1);
