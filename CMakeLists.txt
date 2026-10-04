@@ -73,6 +73,8 @@ add_executable(HomePanel
     src/ui/widgets/CarStatusCard.cpp
     src/ui/widgets/MotionLedsRow.cpp
     src/ui/widgets/WashingMachineCard.cpp
+    src/ui/widgets/SystemInfoPopup.cpp
+    
 )
 
 find_package(CURL REQUIRED)

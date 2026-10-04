@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../widgets/PanelWidgets.h"
+#include "../widgets/SystemInfoPopup.h"
 
 // Layout verticale 1080x1920 (altezze in pixel, ultima riga flessibile):
 //
@@ -43,5 +44,5 @@ private:
     StationTile stationTile;
 
     AgendaPanel agendaPanel;
-
+    SystemInfoPopup infoPopup;
 };

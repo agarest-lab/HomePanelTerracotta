@@ -11,6 +11,8 @@
 #include <cstdio>
 #include <ctime>
 
+#include "../../services/EventLog.h"
+
 using namespace Theme;
 
 // ============================================================================
@@ -262,6 +264,13 @@ void AlertBanner::refresh()
         else if(!ev.empty())                                    text = ev;
     }
     lv_label_set_text(event, text.c_str());
+    
+    static std::string lastAlert;
+    if(text != lastAlert)
+    {
+        if(!lastAlert.empty()) EventLog::instance().add("Allerta meteo: " + text);
+        lastAlert = text;
+    }
 
     if(noAlert || expires.empty())
         lv_label_set_text(info, "Non presente");
@@ -627,6 +636,7 @@ void LightsPanel::onChip(lv_event_t* e)
     bool isOn = repo().getBoolState(kLights[ch->index].entity);
     repo().requestServiceCall(kLights[ch->index].domain, isOn ? "turn_off" : "turn_on",
                               kLights[ch->index].entity, isOn ? "off" : "on");
+    EventLog::instance().add(std::string("Luce ") + kLights[ch->index].name + (isOn ? " spenta" : " accesa"));
     ch->self->refresh();
 }
 

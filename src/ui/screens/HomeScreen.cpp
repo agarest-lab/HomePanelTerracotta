@@ -2,6 +2,7 @@
 #include "../Theme.h"
 
 #include <lvgl.h>
+#include "../../services/EventLog.h"
 
 namespace
 {
@@ -105,4 +106,7 @@ void HomeScreen::create()
     stationTile.create(stationCell);
 
     agendaPanel.create(agendaCell);
+    
+    EventLog::instance().add("Avvio HomePanel");
+    infoPopup.create();     // deve stare per ultimo: cosi' la zona di tap e' sopra tutto
 }
