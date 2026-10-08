@@ -25,7 +25,7 @@ add_executable(HomePanel
     src/graphics/SDLDisplay.cpp
     src/ui/UI.cpp
     src/ui/screens/HomeScreen.cpp
-    src/ui/widgets/ClockCard.cpp
+    #src/ui/widgets/ClockCard.cpp
     src/ui/widgets/CameraCard.cpp
     src/ui/widgets/PanelWidgets.cpp
     src/assets/fonts/ui_clock_112.c
@@ -46,13 +46,11 @@ add_executable(HomePanel
     src/assets/fonts/ui_serif_44.c
     src/assets/fonts/ui_serif_52.c
     src/assets/fonts/ui_serif_60.c
-    src/ui/widgets/StatusCardsRow.cpp
+    #src/ui/widgets/StatusCardsRow.cpp
     src/services/HomeAssistantClient.cpp
     src/services/HomeAssistantRepository.cpp
     src/services/CameraFeed.cpp
-    src/assets/montserrat_orario_140.c
-    src/assets/montserrat_orario_140.c
-    src/assets/weather_icons/sun_96.c
+    #src/assets/montserrat_orario_140.c
     src/assets/weather_icons/moon_96.c
     src/assets/weather_icons/rain_96.c
     src/assets/weather_icons/storm_96.c
@@ -61,18 +59,18 @@ add_executable(HomePanel
     src/assets/weather_icons/moon_cloud_96.c
     src/assets/weather_icons/snow_96.c
     src/assets/weather_icons/sun_cloud_96.c
-    src/ui/widgets/WeatherCardsRow.cpp
+    #src/ui/widgets/WeatherCardsRow.cpp
     src/services/CalendarFeed.cpp
-    src/ui/widgets/CalendarCard.cpp
-    src/ui/widgets/EnergyGaugesPanel.h
-    src/ui/widgets/ToggleRow.cpp
-    src/ui/widgets/ToggleRow.h
-    src/ui/widgets/EnergyGaugesPanel.cpp
-    src/ui/widgets/DayNightCardsRow.cpp
+    #src/ui/widgets/CalendarCard.cpp
+    #src/ui/widgets/EnergyGaugesPanel.h
+    #src/ui/widgets/ToggleRow.cpp
+    #src/ui/widgets/ToggleRow.h
+    #src/ui/widgets/EnergyGaugesPanel.cpp
+    #src/ui/widgets/DayNightCardsRow.cpp
     src/ui/widgets/WeatherIconCard.cpp
-    src/ui/widgets/CarStatusCard.cpp
-    src/ui/widgets/MotionLedsRow.cpp
-    src/ui/widgets/WashingMachineCard.cpp
+    #src/ui/widgets/CarStatusCard.cpp
+    #src/ui/widgets/MotionLedsRow.cpp
+    #src/ui/widgets/WashingMachineCard.cpp
     src/ui/widgets/SystemInfoPopup.cpp
     
 )
