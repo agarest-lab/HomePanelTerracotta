@@ -14,6 +14,7 @@
 //  [ Stato sistema | Temperature interne    ] 200
 //  [ Meteo | Qualita' aria | Stazione       ] 130
 //  [ Impegni                                ] resto
+//  [ Scalda bagnetto | Abilitato            ]  60
 class HomeScreen
 {
 
@@ -44,5 +45,6 @@ private:
     StationTile stationTile;
 
     AgendaPanel agendaPanel;
+    HeaterBar heaterBar;
     SystemInfoPopup infoPopup;
 };

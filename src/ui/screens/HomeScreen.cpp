@@ -47,7 +47,7 @@ void HomeScreen::create()
     static const int32_t camCols[] = { LV_GRID_FR(5), LV_GRID_FR(7), LV_GRID_TEMPLATE_LAST };
     static const int32_t triCols[] = { LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
 
-    static const int32_t rootRows[]   = { 130, 80, 364, 312, 198, 210, 138, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+    static const int32_t rootRows[]   = { 130, 80, 364, 312, 198, 210, 138, LV_GRID_FR(1), 60, LV_GRID_TEMPLATE_LAST };
     static const int32_t energyRows[] = { 178, 178, LV_GRID_TEMPLATE_LAST };
     static const int32_t oneRow[]     = { LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
 
@@ -80,6 +80,7 @@ void HomeScreen::create()
     lv_obj_t* stationCell = cellOf(infoGrid, 2, 1, 0, 1);
 
     lv_obj_t* agendaCell = cellOf(root, 0, 1, 7, 1);
+    lv_obj_t* heaterCell = cellOf(root, 0, 1, 8, 1);
 
     // Dimensioni reali delle celle prima di creare i pannelli
     // (la telecamera ne ha bisogno per scalare il video)
@@ -106,6 +107,7 @@ void HomeScreen::create()
     stationTile.create(stationCell);
 
     agendaPanel.create(agendaCell);
+    heaterBar.create(heaterCell);
     
     EventLog::instance().add("Avvio HomePanel");
     infoPopup.create();     // deve stare per ultimo: cosi' la zona di tap e' sopra tutto

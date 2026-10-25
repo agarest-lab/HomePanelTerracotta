@@ -195,3 +195,32 @@ public:
 private:
     lv_obj_t* list = nullptr;
 };
+
+
+// Riga sottile sotto l'agenda: stato di switch.scalda_bagnetto e di
+// input_boolean.scalda_bagnetto_abilitato. Ogni chip e' acceso (ON) o spento (OFF)
+// e al tocco commuta l'entita'.
+class HeaterBar : public Panel
+{
+public:
+    void create(lv_obj_t* cell);
+    void refresh() override;
+
+private:
+    struct Chip
+    {
+        const char* domain = nullptr;
+        const char* entity = nullptr;
+        const char* name = nullptr;
+        const char* icon = nullptr;
+        uint32_t onColor = 0;
+        lv_obj_t* obj = nullptr;
+        lv_obj_t* iconL = nullptr;
+        lv_obj_t* nameL = nullptr;
+        lv_obj_t* stateL = nullptr;
+    };
+
+    std::array<Chip, 2> chips;
+
+    static void onChip(lv_event_t* e);
+};

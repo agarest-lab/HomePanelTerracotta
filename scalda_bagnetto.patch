@@ -1,0 +1,193 @@
+diff --git a/src/ui/screens/HomeScreen.cpp b/src/ui/screens/HomeScreen.cpp
+index 9d43ad2..20ec6e6 100644
+--- a/src/ui/screens/HomeScreen.cpp
++++ b/src/ui/screens/HomeScreen.cpp
+@@ -47,7 +47,7 @@ void HomeScreen::create()
+     static const int32_t camCols[] = { LV_GRID_FR(5), LV_GRID_FR(7), LV_GRID_TEMPLATE_LAST };
+     static const int32_t triCols[] = { LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+ 
+-    static const int32_t rootRows[]   = { 130, 80, 364, 312, 198, 210, 138, LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
++    static const int32_t rootRows[]   = { 130, 80, 364, 312, 198, 210, 138, LV_GRID_FR(1), 60, LV_GRID_TEMPLATE_LAST };
+     static const int32_t energyRows[] = { 178, 178, LV_GRID_TEMPLATE_LAST };
+     static const int32_t oneRow[]     = { LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
+ 
+@@ -80,6 +80,7 @@ void HomeScreen::create()
+     lv_obj_t* stationCell = cellOf(infoGrid, 2, 1, 0, 1);
+ 
+     lv_obj_t* agendaCell = cellOf(root, 0, 1, 7, 1);
++    lv_obj_t* heaterCell = cellOf(root, 0, 1, 8, 1);
+ 
+     // Dimensioni reali delle celle prima di creare i pannelli
+     // (la telecamera ne ha bisogno per scalare il video)
+@@ -106,6 +107,7 @@ void HomeScreen::create()
+     stationTile.create(stationCell);
+ 
+     agendaPanel.create(agendaCell);
++    heaterBar.create(heaterCell);
+     
+     EventLog::instance().add("Avvio HomePanel");
+     infoPopup.create();     // deve stare per ultimo: cosi' la zona di tap e' sopra tutto
+diff --git a/src/ui/screens/HomeScreen.h b/src/ui/screens/HomeScreen.h
+index 99bf8b9..48c45f7 100644
+--- a/src/ui/screens/HomeScreen.h
++++ b/src/ui/screens/HomeScreen.h
+@@ -14,6 +14,7 @@
+ //  [ Stato sistema | Temperature interne    ] 200
+ //  [ Meteo | Qualita' aria | Stazione       ] 130
+ //  [ Impegni                                ] resto
++//  [ Scalda bagnetto | Abilitato            ]  60
+ class HomeScreen
+ {
+ 
+@@ -44,5 +45,6 @@ private:
+     StationTile stationTile;
+ 
+     AgendaPanel agendaPanel;
++    HeaterBar heaterBar;
+     SystemInfoPopup infoPopup;
+ };
+diff --git a/src/ui/widgets/PanelWidgets.cpp b/src/ui/widgets/PanelWidgets.cpp
+index 2631c93..326a119 100644
+--- a/src/ui/widgets/PanelWidgets.cpp
++++ b/src/ui/widgets/PanelWidgets.cpp
+@@ -917,7 +917,7 @@ void AgendaPanel::refresh()
+     int n = 0;
+     for(const auto& ev : events)
+     {
+-        if(n >= 6) break;
++        if(n >= 5) break;
+ 
+         uint32_t color = calendarColor(ev.calendarId);
+ 
+@@ -944,3 +944,94 @@ void AgendaPanel::refresh()
+         n++;
+     }
+ }
++
++
++// ============================================================================
++//  SCALDA BAGNETTO (riga sottile: stato scaldino + abilitazione)
++// ============================================================================
++void HeaterBar::create(lv_obj_t* cell)
++{
++    chips[0].domain = "switch";
++    chips[0].entity = "switch.scalda_bagnetto";
++    chips[0].name   = "Scalda bagnetto";
++    chips[0].icon   = Ico::TEMP;
++    chips[0].onColor = ORANGE;
++
++    chips[1].domain = "input_boolean";
++    chips[1].entity = "input_boolean.scalda_bagnetto_abilitato";
++    chips[1].name   = "Abilitato";
++    chips[1].icon   = Ico::CALENDAR;
++    chips[1].onColor = OLIVE;
++
++    static const int32_t cols[] = { LV_GRID_FR(1), LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
++    static const int32_t rows[] = { LV_GRID_FR(1), LV_GRID_TEMPLATE_LAST };
++
++    lv_obj_t* g = lv_obj_create(cell);
++    lv_obj_remove_style_all(g);
++    lv_obj_set_size(g, LV_PCT(100), LV_PCT(100));
++    lv_obj_set_grid_dsc_array(g, cols, rows);
++    lv_obj_set_style_pad_gap(g, 8, 0);
++    lv_obj_set_scrollable(g, false);
++
++    for(int i = 0; i < 2; i++)
++    {
++        Chip& ch = chips[i];
++        repo().watch(ch.entity);
++
++        ch.obj = lv_obj_create(g);
++        lv_obj_set_grid_cell(ch.obj, LV_GRID_ALIGN_STRETCH, i, 1, LV_GRID_ALIGN_STRETCH, 0, 1);
++        lv_obj_set_flex_flow(ch.obj, LV_FLEX_FLOW_ROW);
++        lv_obj_set_flex_align(ch.obj, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
++        lv_obj_set_style_radius(ch.obj, 16, 0);
++        lv_obj_set_style_pad_hor(ch.obj, 20, 0);
++        lv_obj_set_style_pad_ver(ch.obj, 0, 0);
++        lv_obj_set_style_pad_column(ch.obj, 12, 0);
++        lv_obj_set_style_border_width(ch.obj, 2, 0);
++        lv_obj_set_style_bg_opa(ch.obj, LV_OPA_COVER, 0);
++        lv_obj_set_scrollable(ch.obj, false);
++
++        ch.iconL  = label(ch.obj, ch.icon, I24);
++        ch.nameL  = label(ch.obj, ch.name, S22);
++        lv_obj_set_flex_grow(ch.nameL, 1);
++        ch.stateL = label(ch.obj, "", B22);
++
++        lv_obj_add_event_cb(ch.obj, onChip, LV_EVENT_CLICKED, &ch);
++    }
++
++    refresh();
++    autoRefresh(2000);
++}
++
++void HeaterBar::refresh()
++{
++    for(auto& ch : chips)
++    {
++        bool isOn = repo().getBoolState(ch.entity);
++
++        lv_obj_set_style_bg_color(ch.obj, c(isOn ? ch.onColor : BG), 0);
++        lv_obj_set_style_border_color(ch.obj, c(isOn ? ch.onColor : CARD_LINE), 0);
++        lv_obj_set_style_text_color(ch.iconL,  c(isOn ? WHITE : MUTED), 0);
++        lv_obj_set_style_text_color(ch.nameL,  c(isOn ? WHITE : MUTED), 0);
++        lv_obj_set_style_text_color(ch.stateL, c(isOn ? WHITE : MUTED), 0);
++        lv_label_set_text(ch.stateL, isOn ? "ON" : "OFF");
++    }
++}
++
++void HeaterBar::onChip(lv_event_t* e)
++{
++    Chip* ch = static_cast<Chip*>(lv_event_get_user_data(e));
++    bool isOn = repo().getBoolState(ch->entity);
++
++    repo().requestServiceCall(ch->domain, isOn ? "turn_off" : "turn_on",
++                              ch->entity, isOn ? "off" : "on");
++    EventLog::instance().add(std::string(ch->name) + (isOn ? " disattivato" : " attivato"));
++
++    // aggiorna subito i colori (la cache e' gia' ottimistica)
++    bool nowOn = !isOn;
++    lv_obj_set_style_bg_color(ch->obj, c(nowOn ? ch->onColor : BG), 0);
++    lv_obj_set_style_border_color(ch->obj, c(nowOn ? ch->onColor : CARD_LINE), 0);
++    lv_obj_set_style_text_color(ch->iconL,  c(nowOn ? WHITE : MUTED), 0);
++    lv_obj_set_style_text_color(ch->nameL,  c(nowOn ? WHITE : MUTED), 0);
++    lv_obj_set_style_text_color(ch->stateL, c(nowOn ? WHITE : MUTED), 0);
++    lv_label_set_text(ch->stateL, nowOn ? "ON" : "OFF");
++}
+diff --git a/src/ui/widgets/PanelWidgets.h b/src/ui/widgets/PanelWidgets.h
+index 1620e61..f1f402d 100644
+--- a/src/ui/widgets/PanelWidgets.h
++++ b/src/ui/widgets/PanelWidgets.h
+@@ -195,3 +195,32 @@ public:
+ private:
+     lv_obj_t* list = nullptr;
+ };
++
++
++// Riga sottile sotto l'agenda: stato di switch.scalda_bagnetto e di
++// input_boolean.scalda_bagnetto_abilitato. Ogni chip e' acceso (ON) o spento (OFF)
++// e al tocco commuta l'entita'.
++class HeaterBar : public Panel
++{
++public:
++    void create(lv_obj_t* cell);
++    void refresh() override;
++
++private:
++    struct Chip
++    {
++        const char* domain = nullptr;
++        const char* entity = nullptr;
++        const char* name = nullptr;
++        const char* icon = nullptr;
++        uint32_t onColor = 0;
++        lv_obj_t* obj = nullptr;
++        lv_obj_t* iconL = nullptr;
++        lv_obj_t* nameL = nullptr;
++        lv_obj_t* stateL = nullptr;
++    };
++
++    std::array<Chip, 2> chips;
++
++    static void onChip(lv_event_t* e);
++};
